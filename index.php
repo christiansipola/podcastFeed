@@ -70,6 +70,7 @@ class View{
 			$item->appendChild( $xml->createElement('pubDate',$s['pubDate']) );
 			
 		}
+		header('Content-Type: application/octet-stream');
 		echo $xml->saveXML();
 		#error_log($xml->saveXML());
 	}
