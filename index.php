@@ -21,7 +21,7 @@ class View{
 		
 		$show[] = array(
 			'title' => '2009-09-18 del 1',
-			'url'	=> 'http://p3popular.sipola.se/p3Populär-2009-09-18-1.mp3',
+			'url'	=> 'http://christian.sipola.se/p3Populär-2009-09-18-1.mp3',
 			'length' => '83593008',
 			'pubDate' => date_create('2009-09-18 13:15:00')->format(DATE_RSS)
 			
@@ -31,7 +31,7 @@ class View{
 		$pub = date_create('now')->format(DATE_RSS);
 		$xml = new DOMDocument('1.0', 'UTF-8');
 		// we want a nice output
-		//$xml->formatOutput = true;
+		$xml->formatOutput = true;
 		/*
 		 * <hrxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 *	xsi:noNamespaceSchemaLocation="file:LonXML.xsd">
