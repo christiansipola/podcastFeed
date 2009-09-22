@@ -41,7 +41,7 @@ class View{
 		$rssNode->setAttribute('version',  '2.0' );
 		$rssNode->setAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
 		
-		$channel = $xml->appendChild( $xml->createElement('channel') );
+		$channel = $rssNode->appendChild( $xml->createElement('channel') );
 		
 		$channel->appendChild( $xml->createElement('title','P3 Populär') );
 		$channel->appendChild( $xml->createElement('description','P3 Populär podcast') );
@@ -70,7 +70,7 @@ class View{
 			$item->appendChild( $xml->createElement('pubDate',$s['pubDate']) );
 			
 		}
-		header('Content-Type: application/octet-stream');
+		header('Content-Type: application/xml');
 		echo $xml->saveXML();
 		#error_log($xml->saveXML());
 	}
