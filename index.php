@@ -31,7 +31,7 @@ class View{
 		$pub = date_create('now')->format(DATE_RSS);
 		$xml = new DOMDocument('1.0', 'UTF-8');
 		// we want a nice output
-		$xml->formatOutput = true;
+		//$xml->formatOutput = true;
 		/*
 		 * <hrxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 *	xsi:noNamespaceSchemaLocation="file:LonXML.xsd">
