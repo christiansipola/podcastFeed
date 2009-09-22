@@ -54,7 +54,7 @@ class View{
 		$channel->appendChild( $xml->createElement('itunes:author','zippo@sovjet.sipola.se') );
 		$channel->appendChild( $xml->createElement('itunes:subtitle','Ripped podcast') );
 		$channel->appendChild( $xml->createElement('itunes:explicit','No') );
-		$channel->appendChild( $xml->createElement('itunes:image','http://www.sr.se/Diverse/AppData/isidor/images/News_images/2785/526933_760_117.jpg') );
+		$channel->appendChild( $xml->createElement('itunes:image')->setAttribute('href','http://www.sr.se/Diverse/AppData/isidor/images/News_images/2785/526933_760_117.jpg') );
 		
 		foreach($show as $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
