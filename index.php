@@ -21,7 +21,7 @@ class View{
 		
 		$show[] = array(
 			'title' => '2009-09-18 del 1',
-			'url'	=> 'http://christian.sipola.se/p3Populär-2009-09-18-1.mp3',
+			'url'	=> 'http://p3popular.sipola.se/p3Populär-2009-09-18-1.mp3',
 			'length' => '83593008',
 			'pubDate' => date_create('2009-09-18 13:15:00')->format(DATE_RSS)
 			
@@ -45,7 +45,7 @@ class View{
 		
 		$channel->appendChild( $xml->createElement('title','P3 Populär') );
 		$channel->appendChild( $xml->createElement('description','P3 Populär podcast') );
-		$channel->appendChild( $xml->createElement('link','http://localhost:8888/podcastFeed/') );
+		$channel->appendChild( $xml->createElement('link','http://p3popular.sipola.se/podcastFeed/') );
 		$channel->appendChild( $xml->createElement('language','sv-se') );
 		$channel->appendChild( $xml->createElement('copyright','Sveriges Radio') );
 		$channel->appendChild( $xml->createElement('lastBuildDate',$build) );
@@ -54,7 +54,10 @@ class View{
 		$channel->appendChild( $xml->createElement('itunes:author','zippo@sovjet.sipola.se') );
 		$channel->appendChild( $xml->createElement('itunes:subtitle','Ripped podcast') );
 		$channel->appendChild( $xml->createElement('itunes:explicit','No') );
-		$channel->appendChild( $xml->createElement('itunes:image')->setAttribute('href','http://www.sr.se/Diverse/AppData/isidor/images/News_images/2785/526933_760_117.jpg') );
+		$image = $channel->appendChild( $xml->createElement('itunes:image'));
+		$image->setAttribute('href','http://www.sr.se/Diverse/AppData/isidor/images/News_images/2785/526933_760_117.jpg');
+		$category = $channel->appendChild( $xml->createElement('itunes:category'));
+		$category->setAttribute('text','Technology');
 		
 		foreach($show as $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
