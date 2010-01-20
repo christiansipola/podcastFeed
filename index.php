@@ -3,32 +3,108 @@
 
 class Model{
 	
+	#const DIR='/Volumes/p3popular';
+	const DIR='/home/ftp/Radio/p3popular';
+	const MINSIZE = '83593008';
 	
+	public $latestBuild;
 	
-}
-class Controller{
+	public $show;
 	
-	public function index(){
+	public function getShowWithLS(){
+	
 		
-		$v = new View();
-		$v->render();
+		chdir(self::DIR);
+		$ls = `ls -l p3Pop*`;
+		$file = array_slice(explode("\n",$ls),-21,20);
+		foreach($file as $f){
+			
+			$matches = array();
+			$pattern = '/.*(.{3} .{1} .{2}:.{2}) p3Populär-(.{10})-(.{1})\.mp3/';
+			$pattern = '/.*(\S{3} \S{1} \S{2}:\S{2}).*/';
+			preg_match($pattern,$f,$matches);
+			echo '<pre>';var_dump($matches);echo '</pre>';die();
+			$show[] = array(
+				'title' => '2009-09-18 del 1',
+				'url'	=> 'http://p3popular.sipola.se/p3Populär-2009-09-18-1.mp3',
+				'length' => '83593008',
+				'pubDate' => date_create('2009-09-18 13:15:00')->format(DATE_RSS)
+				
+			);
+		}
+		
+		
+	}
+	
+	
+	public function getShow(){
+		
+		if(! is_dir(self::DIR)){
+			throw new Exception('directory '.self::DIR.' does not exist');
+		}
+		chdir(self::DIR);
+		$dir = scandir(self::DIR);
+		
+		foreach($dir as $file){
+			$start = substr(strtolower($file),0,5);
+			if($start != 'p3pop'){
+				continue;
+			}
+			$size = filesize(self::DIR.'/'.$file);
+			if($size < self::MINSIZE){
+				continue;
+			}
+			$mtime = filemtime(self::DIR.'/'.$file);
+			if($mtime > $this->latestBuild){
+				$this->latestBuild = $mtime;
+			}
+			$tmp = explode("-",$file);
+			$year=$tmp[1];
+			$month=$tmp[2];
+			$day=$tmp[3];
+			$part = substr($tmp[4],0,1);
+			$show[] = array(
+				'title' => "$year-$month-$day del $part",
+				'url'	=> "http://p3popular.sipola.se/$file",
+				'length' => $size,
+				#'pubDate' => date_create("$year-$month-$day 13:15:00")->format(DATE_RSS)
+				'pubDate' => date_create("@$mtime")->format(DATE_RSS)
+			);
+			print_r($show);die();
+			
+		}
+		#print_r($dir);
+		
+		$this->show = $show;
+		return;
+		
 	}
 	
 }
+
+
+class Controller{
+	
+	
+	public function index(){
+		
+		$m = new Model();
+		$v = new View();
+		$m->getShow();
+		$v->render($m);
+	}
+	
+	
+}
+
+
 class View{
 	
-	public function render(){
-		
-		$show[] = array(
-			'title' => '2009-09-18 del 1',
-			'url'	=> 'http://p3popular.sipola.se/p3Populär-2009-09-18-1.mp3',
-			'length' => '83593008',
-			'pubDate' => date_create('2009-09-18 13:15:00')->format(DATE_RSS)
-			
-		);
-		
-		$build = date_create('now')->format(DATE_RSS);
-		$pub = date_create('now')->format(DATE_RSS);
+	public function render(Model $model){
+		$show = $model->show;
+		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
+		#$pub = date_create('now')->format(DATE_RSS);
+		$pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		$xml = new DOMDocument('1.0', 'UTF-8');
 		// we want a nice output
 		$xml->formatOutput = true;
@@ -81,4 +157,6 @@ class View{
 
 
 $c = new Controller();
+echo '<pre>';
 $c->index();
+echo '</pre>';
