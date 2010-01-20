@@ -70,7 +70,7 @@ class Model{
 				#'pubDate' => date_create("$year-$month-$day 13:15:00")->format(DATE_RSS)
 				'pubDate' => date_create("@$mtime")->format(DATE_RSS)
 			);
-			print_r($show);die();
+			#print_r($show);die();
 			
 		}
 		#print_r($dir);
@@ -157,6 +157,6 @@ class View{
 
 
 $c = new Controller();
-echo '<pre>';
+#echo '<pre>';
 $c->index();
-echo '</pre>';
+#echo '</pre>';
