@@ -63,12 +63,27 @@ class Model{
 			$month=$tmp[2];
 			$day=$tmp[3];
 			$part = substr($tmp[4],0,1);
+			
+			switch($part){
+				case 1:
+					$hour = 10;
+					break;
+				case 2:
+					$hour = 11;
+					break;
+				case 'm':
+					$hour = 13;
+					break;
+				default:
+					throw new Exception('unknown part');
+					break;
+			}
 			$show[] = array(
 				'title' => "$year-$month-$day del $part",
 				'url'	=> "http://p3popular.sipola.se/$file",
 				'length' => $size,
-				#'pubDate' => date_create("$year-$month-$day 13:15:00")->format(DATE_RSS)
-				'pubDate' => date_create("@$mtime")->format(DATE_RSS)
+				'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
+				#'pubDate' => date_create("@$mtime")->format(DATE_RSS)
 			);
 			#print_r($show);die();
 			
@@ -104,7 +119,7 @@ class View{
 		$show = $model->show;
 		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		#$pub = date_create('now')->format(DATE_RSS);
-		$pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
+		//$pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		$xml = new DOMDocument('1.0', 'UTF-8');
 		// we want a nice output
 		$xml->formatOutput = true;
@@ -125,13 +140,19 @@ class View{
 		$channel->appendChild( $xml->createElement('language','sv-se') );
 		$channel->appendChild( $xml->createElement('copyright','Sveriges Radio') );
 		$channel->appendChild( $xml->createElement('lastBuildDate',$build) );
-		$channel->appendChild( $xml->createElement('pubDate',$pub) );
+		//$channel->appendChild( $xml->createElement('pubDate',$pub) );
 		
 		$channel->appendChild( $xml->createElement('itunes:author','zippo@sovjet.sipola.se') );
 		$channel->appendChild( $xml->createElement('itunes:subtitle','Ripped podcast') );
-		$channel->appendChild( $xml->createElement('itunes:explicit','No') );
+		$channel->appendChild( $xml->createElement('itunes:explicit','no') );
 		$image = $channel->appendChild( $xml->createElement('itunes:image'));
-		$image->setAttribute('href','http://www.sr.se/Diverse/AppData/isidor/images/News_images/2785/526933_760_117.jpg');
+		$image->appendChild( $xml->createElement('title','P3 Populär'));
+		$image->appendChild( $xml->createElement('link','http://www.sr.se/sida/default.aspx?ProgramId=2785'));
+		$image->appendChild( $xml->createElement('url','http://www.sr.se/diverse/images/sr_14_90_90.jpg'));
+		
+		$image = $channel->appendChild( $xml->createElement('itunes:image'));
+		$image->setAttribute('href','http://www.sr.se/diverse/images/sr_14_300_300.jpg');
+		
 		$category = $channel->appendChild( $xml->createElement('itunes:category'));
 		$category->setAttribute('text','Technology');
 		
