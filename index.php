@@ -5,8 +5,7 @@ class Model{
 	
 	#const DIR='/Volumes/p3popular';
 	const DIR='/home/ftp/Radio/p3popular';
-	#const MINSIZE = '83593008';
-	const MINSIZE = '83547869';
+	const MINSIZE = '81095911';
 	
 	public $latestBuild;
 	
