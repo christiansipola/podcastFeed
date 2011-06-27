@@ -37,13 +37,17 @@ class Model{
 	}
 	
 	
-	public function getShow(){
+	/**
+	 * @param string $show p1sommar or p3popular or p3musik
+	 */
+	public function getShow($showName){
 		
 		if(! is_dir(self::DIR)){
 			throw new Exception('directory '.self::DIR.' does not exist');
 		}
 		chdir(self::DIR);
 		$dir = scandir(self::DIR);
+		$show = array();
 		
 		foreach($dir as $file){
 			$start = substr(strtolower($file),0,5);
@@ -64,6 +68,18 @@ class Model{
 			$day=$tmp[3];
 			$part = substr($tmp[4],0,1);
 			
+			if($showName == 'p3popular' && ($part == '1' || $part == '2')){
+				$title = "$year-$month-$day del $part";
+			}
+			
+			elseif($showName == 'p1sommar' && ($part == 'p')){
+				$title = "$year-$month-$day";
+			}
+			else{
+				continue;
+			}
+			
+			
 			switch($part){
 				case 1:
 					$hour = 10;
@@ -74,13 +90,17 @@ class Model{
 				case 'm':
 					$hour = 13;
 					break;
+				case 'p':
+					$hour = 13;
+					break;
+					
 				default:
 					throw new Exception('unknown part');
 					break;
 			}
 			$show[] = array(
-				'title' => "$year-$month-$day del $part",
-				'url'	=> "http://p3popular.sipola.se/$file",
+				'title' => $title,
+				'url'	=> "http://podcast.sipola.se/$file",
 				'length' => $size,
 				'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
 				#'pubDate' => date_create("@$mtime")->format(DATE_RSS)
@@ -103,10 +123,27 @@ class Controller{
 	
 	public function index(){
 		
+		/*
+		 * It seems only REQUEST_URI can be relied on
+		 * All others seems to differ depending on how PHP is run.
+		 * For example mod_php seems to differ from suPHP/CGI
+		 */
+		if(isset($_SERVER['REQUEST_URI'])){
+			//strip base url from URI
+			$path = $_SERVER['REQUEST_URI'];
+			$path = str_ireplace('/podcastFeed/','',$path);
+		}else{
+			$path = '';
+		}
 		$m = new Model();
 		$v = new View();
-		$m->getShow();
-		$v->render($m);
+		$m->getShow($path);
+		
+		if($path == 'p1sommar'){
+			$v->renderP1Sommar($m);
+		}else{
+			$v->render($m);
+		}
 	}
 	
 	
@@ -136,7 +173,7 @@ class View{
 		
 		$channel->appendChild( $xml->createElement('title','P3 Populär') );
 		$channel->appendChild( $xml->createElement('description','P3 Populär podcast') );
-		$channel->appendChild( $xml->createElement('link','http://p3popular.sipola.se/podcastFeed/') );
+		$channel->appendChild( $xml->createElement('link','http://podcast.sipola.se/podcastFeed/') );
 		$channel->appendChild( $xml->createElement('language','sv-se') );
 		$channel->appendChild( $xml->createElement('copyright','Sveriges Radio') );
 		$channel->appendChild( $xml->createElement('lastBuildDate',$build) );
@@ -159,7 +196,7 @@ class View{
 		foreach($show as $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
 			$item->appendChild( $xml->createElement('title',$s['title']) );
-			$item->appendChild( $xml->createElement('link','http://sr.se/p3popular') );
+			$item->appendChild( $xml->createElement('link','http://sverigesradio.se/p3popular') );
 			$item->appendChild( $xml->createElement('guid',$s['url']) );
 			$item->appendChild( $xml->createElement('description','P3 Populär '.$s['title']) );
 			$enc = $item->appendChild( $xml->createElement('enclosure') );
@@ -174,6 +211,71 @@ class View{
 		echo $xml->saveXML();
 		#error_log($xml->saveXML());
 	}
+	
+	
+	public function renderP1Sommar(Model $model){
+		$show = $model->show;
+		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
+		#$pub = date_create('now')->format(DATE_RSS);
+		//$pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
+		$xml = new DOMDocument('1.0', 'UTF-8');
+		// we want a nice output
+		$xml->formatOutput = true;
+		/*
+		 * <hrxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 *	xsi:noNamespaceSchemaLocation="file:LonXML.xsd">
+		 */
+		$rssNode = $xml->appendChild( $xml->createElement('rss') );
+
+		$rssNode->setAttribute('version',  '2.0' );
+		$rssNode->setAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
+		
+		$channel = $rssNode->appendChild( $xml->createElement('channel') );
+		
+		$channel->appendChild( $xml->createElement('title','P1 Sommar') );
+		$channel->appendChild( $xml->createElement('description','P1 Sommar podcast') );
+		$channel->appendChild( $xml->createElement('link','http://podcast.sipola.se/podcastFeed/p1sommar') );
+		$channel->appendChild( $xml->createElement('language','sv-se') );
+		$channel->appendChild( $xml->createElement('copyright','Sveriges Radio') );
+		$channel->appendChild( $xml->createElement('lastBuildDate',$build) );
+		//$channel->appendChild( $xml->createElement('pubDate',$pub) );
+		
+		$channel->appendChild( $xml->createElement('itunes:author','zippo@sovjet.sipola.se') );
+		$channel->appendChild( $xml->createElement('itunes:subtitle','Ripped podcast') );
+		$channel->appendChild( $xml->createElement('itunes:explicit','no') );
+		
+		$image = $channel->appendChild( $xml->createElement('itunes:image'));
+		$image->appendChild( $xml->createElement('title','P1 Sommar'));
+		$image->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071'));
+		$image->appendChild( $xml->createElement('url','http://sverigesradio.se/diverse/images/srlogo-2011.png'));
+		
+		/*
+		$image = $channel->appendChild( $xml->createElement('itunes:image'));
+		$image->setAttribute('href','http://sverigesradio.se/diverse/images/srlogo-2011.png');
+		*/
+		
+		#$category = $channel->appendChild( $xml->createElement('itunes:category'));
+		#$category->setAttribute('text','Technology');
+		
+		foreach($show as $s){
+			$item = $channel->appendChild( $xml->createElement('item') );
+			$item->appendChild( $xml->createElement('title',$s['title']) );
+			$item->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071') );
+			$item->appendChild( $xml->createElement('guid',$s['url']) );
+			$item->appendChild( $xml->createElement('description','P1 sommar '.$s['title']) );
+			$enc = $item->appendChild( $xml->createElement('enclosure') );
+			$enc->setAttribute('url',$s['url']);
+			$enc->setAttribute('length',$s['length']);
+			$enc->setAttribute('type','audio/mpeg');
+			$item->appendChild( $xml->createElement('category','Podcasts') );
+			$item->appendChild( $xml->createElement('pubDate',$s['pubDate']) );
+			
+		}
+		#header('Content-Type: application/xml');
+		echo $xml->saveXML();
+		#error_log($xml->saveXML());
+	}
+	
 }
 
 
