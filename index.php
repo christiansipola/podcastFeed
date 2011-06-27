@@ -115,6 +115,59 @@ class Model{
 		
 	}
 	
+	public static function getInfoP1Sommar(){
+		
+		$debug = false;
+		
+		ini_set('user_agent', 'Void/2.5');
+
+		//list
+		$url = 'http://api.sr.se/api/rssfeed/rssfeed.aspx?lyssnaigenfeed=2071';
+		if($debug && isset($_SESSION['parse_str'])){ //DEBUG
+			$str = $_SESSION['parse_str'];
+		}else{
+			#echo "fetch!";
+
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+			$str = curl_exec($curl);
+			curl_close($curl);
+			$_SESSION['parse_str'] = $str;
+			#echo '<pre>';
+			#echo htmlentities($str);
+			#echo '</pre>';
+			
+			#echo $str;die();
+		}
+
+		$return = array();
+		
+		$xml = new SimpleXMLElement($str);
+		if(!$xml->channel->item){
+			echo "Ingen item hittades";
+			echo '<pre>';
+			echo htmlentities($str);
+			echo '</pre>';
+			$html->clear();
+			#return $return;
+		}
+		
+
+		foreach($xml->channel->item as $i){
+			$title = (string)$i->title;
+			$return[] = $title;
+		}
+		unset($xml);
+		
+		array_pop($return); //remove first episode
+		$return = array_reverse($return);
+		return $return;
+	}
+	
+	
 }
 
 
@@ -122,6 +175,8 @@ class Controller{
 	
 	
 	public function index(){
+		
+		$info = Model::getInfoP1Sommar();
 		
 		/*
 		 * It seems only REQUEST_URI can be relied on
@@ -140,7 +195,7 @@ class Controller{
 		$m->getShow($path);
 		
 		if($path == 'p1sommar'){
-			$v->renderP1Sommar($m);
+			$v->renderP1Sommar($m,$info);
 		}else{
 			$v->render($m);
 		}
@@ -213,7 +268,11 @@ class View{
 	}
 	
 	
-	public function renderP1Sommar(Model $model){
+	/**
+	 * @param Model $model
+	 * @param array $info
+	 */
+	public function renderP1Sommar(Model $model,$info){
 		$show = $model->show;
 		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		#$pub = date_create('now')->format(DATE_RSS);
@@ -232,8 +291,8 @@ class View{
 		
 		$channel = $rssNode->appendChild( $xml->createElement('channel') );
 		
-		$channel->appendChild( $xml->createElement('title','P1 Sommar') );
-		$channel->appendChild( $xml->createElement('description','P1 Sommar podcast') );
+		$channel->appendChild( $xml->createElement('title','Sommar i P1') );
+		$channel->appendChild( $xml->createElement('description','Sommar i P1 podcast') );
 		$channel->appendChild( $xml->createElement('link','http://podcast.sipola.se/podcastFeed/p1sommar') );
 		$channel->appendChild( $xml->createElement('language','sv-se') );
 		$channel->appendChild( $xml->createElement('copyright','Sveriges Radio') );
@@ -245,7 +304,7 @@ class View{
 		$channel->appendChild( $xml->createElement('itunes:explicit','no') );
 		
 		$image = $channel->appendChild( $xml->createElement('itunes:image'));
-		$image->appendChild( $xml->createElement('title','P1 Sommar'));
+		$image->appendChild( $xml->createElement('title','Sommar i P1'));
 		$image->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071'));
 		$image->appendChild( $xml->createElement('url','http://sverigesradio.se/diverse/images/srlogo-2011.png'));
 		
@@ -257,12 +316,13 @@ class View{
 		#$category = $channel->appendChild( $xml->createElement('itunes:category'));
 		#$category->setAttribute('text','Technology');
 		
-		foreach($show as $s){
+		foreach($show as $key => $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
-			$item->appendChild( $xml->createElement('title',$s['title']) );
+			#$item->appendChild( $xml->createElement('title',$s['title']) );
+			$item->appendChild( $xml->createElement('title',$info[$key]) );
 			$item->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071') );
 			$item->appendChild( $xml->createElement('guid',$s['url']) );
-			$item->appendChild( $xml->createElement('description','P1 sommar '.$s['title']) );
+			$item->appendChild( $xml->createElement('description',$info[$key]) );
 			$enc = $item->appendChild( $xml->createElement('enclosure') );
 			$enc->setAttribute('url',$s['url']);
 			$enc->setAttribute('length',$s['length']);
