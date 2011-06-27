@@ -50,8 +50,8 @@ class Model{
 		$show = array();
 		
 		foreach($dir as $file){
-			$start = substr(strtolower($file),0,5);
-			if($start != 'p3pop'){
+			$start = substr(strtolower($file),0,7);
+			if($start != 'podcast'){
 				continue;
 			}
 			$size = filesize(self::DIR.'/'.$file);
@@ -271,7 +271,7 @@ class View{
 			$item->appendChild( $xml->createElement('pubDate',$s['pubDate']) );
 			
 		}
-		#header('Content-Type: application/xml');
+		header('Content-Type: application/xml');
 		echo $xml->saveXML();
 		#error_log($xml->saveXML());
 	}
