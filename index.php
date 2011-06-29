@@ -55,25 +55,35 @@ class Model{
 				continue;
 			}
 			$size = filesize(self::DIR.'/'.$file);
-			if($size < self::MINSIZE){
+			$tmp = explode("-",$file);
+			if(count($tmp) < 4){
+				continue;
+			}
+			$part = substr($tmp[4],0,1);
+			$year=$tmp[1];
+			$month=$tmp[2];
+			$day=$tmp[3];
+			if($part == 'q'  && $size < (self::MINSIZE/2) ){
+				continue; //second part of podcast is only 30 min
+			}
+			
+			if($part != 'q' && $size < self::MINSIZE){
 				continue;
 			}
 			$mtime = filemtime(self::DIR.'/'.$file);
 			if($mtime > $this->latestBuild){
 				$this->latestBuild = $mtime;
 			}
-			$tmp = explode("-",$file);
-			$year=$tmp[1];
-			$month=$tmp[2];
-			$day=$tmp[3];
-			$part = substr($tmp[4],0,1);
 			
 			if($showName == 'p3popular' && ($part == '1' || $part == '2')){
 				$title = "$year-$month-$day del $part";
 			}
 			
 			elseif($showName == 'p1sommar' && ($part == 'p')){
-				$title = "$year-$month-$day";
+				$title = "del 1";
+			}
+			elseif($showName == 'p1sommar' && ($part == 'q')){
+				$title = "del 2";
 			}
 			else{
 				continue;
@@ -93,6 +103,9 @@ class Model{
 				case 'p':
 					$hour = 13;
 					break;
+				case 'q':
+					$hour = 14;
+					break;
 					
 				default:
 					throw new Exception('unknown part');
@@ -100,6 +113,7 @@ class Model{
 			}
 			$show[] = array(
 				'title' => $title,
+				'date' => "$year-$month-$day",
 				'url'	=> "http://podcast.sipola.se/$file",
 				'length' => $size,
 				'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
@@ -158,11 +172,17 @@ class Model{
 
 		foreach($xml->channel->item as $i){
 			$title = (string)$i->title;
-			$return[] = $title;
+			$matches = array();
+			$pattern = '/Sommar i P1 med (.*?) \((.{4}-.{2}-.{2}).*/';
+			preg_match($pattern, $title, $matches);
+			if(! isset($matches[2])){
+				continue;
+			}
+			$date = $matches[2];
+			$return[$date] = $title;
 		}
 		unset($xml);
 		
-		array_pop($return); //remove first episode
 		$return = array_reverse($return);
 		return $return;
 	}
@@ -319,10 +339,10 @@ class View{
 		foreach($show as $key => $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
 			#$item->appendChild( $xml->createElement('title',$s['title']) );
-			$item->appendChild( $xml->createElement('title',$info[$key]) );
+			$item->appendChild( $xml->createElement('title',$info[$s['date']].' '.$s['title']) );
 			$item->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071') );
 			$item->appendChild( $xml->createElement('guid',$s['url']) );
-			$item->appendChild( $xml->createElement('description',$info[$key]) );
+			$item->appendChild( $xml->createElement('description',$info[$s['date']]) );
 			$enc = $item->appendChild( $xml->createElement('enclosure') );
 			$enc->setAttribute('url',$s['url']);
 			$enc->setAttribute('length',$s['length']);
