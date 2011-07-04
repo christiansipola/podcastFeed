@@ -179,7 +179,7 @@ class Model{
 				continue;
 			}
 			$date = $matches[2];
-			$return[$date] = $title;
+			$return[$date] = array('title' => $matches[1].' '.$matches[2], 'desc'=>$title);
 		}
 		unset($xml);
 		
@@ -339,10 +339,10 @@ class View{
 		foreach($show as $key => $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
 			#$item->appendChild( $xml->createElement('title',$s['title']) );
-			$item->appendChild( $xml->createElement('title',$info[$s['date']].' '.$s['title']) );
+			$item->appendChild( $xml->createElement('title',$info[$s['date']]['title'].' '.$s['title']) );
 			$item->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071') );
 			$item->appendChild( $xml->createElement('guid',$s['url']) );
-			$item->appendChild( $xml->createElement('description',$info[$s['date']]) );
+			$item->appendChild( $xml->createElement('description',$info[$s['date']]['desc'].' '.$s['title']) );
 			$enc = $item->appendChild( $xml->createElement('enclosure') );
 			$enc->setAttribute('url',$s['url']);
 			$enc->setAttribute('length',$s['length']);
