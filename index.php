@@ -5,7 +5,8 @@ class Model{
 	
 	#const DIR='/Volumes/p3popular';
 	const DIR='/home/ftp/Radio/p3popular';
-	const MINSIZE = '81095911';
+	#const MINSIZE = '81095911';
+	const MINSIZE = '69170187'; //22:00
 	
 	public $latestBuild;
 	
@@ -75,7 +76,7 @@ class Model{
 				$this->latestBuild = $mtime;
 			}
 			
-			if($showName == 'p3popular' && ($part == '1' || $part == '2')){
+			if($showName == 'p3popular' && ($part == '1' || $part == '2' || $part == 'm' ||$part=='s')){
 				$title = "$year-$month-$day del $part";
 			}
 			
@@ -102,6 +103,9 @@ class Model{
 					break;
 				case 'p':
 					$hour = 13;
+					break;
+				case 's':
+					$hour = 19;
 					break;
 				case 'q':
 					$hour = 14;
@@ -196,7 +200,7 @@ class Controller{
 	
 	public function index(){
 		
-		$info = Model::getInfoP1Sommar();
+		#$info = Model::getInfoP1Sommar();
 		
 		/*
 		 * It seems only REQUEST_URI can be relied on
