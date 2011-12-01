@@ -3,8 +3,8 @@
 
 class Model{
 	
-	const DIR='/Volumes/p3popular';
-	#const DIR='/home/ftp/Radio/p3popular';
+	#const DIR='/Volumes/p3popular';
+	const DIR='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
 	const MINSIZE = '69170187'; //22:00
 	
