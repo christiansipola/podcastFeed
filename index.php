@@ -3,8 +3,8 @@
 
 class Model{
 	
-	#const DIR='/Volumes/p3popular';
-	const DIR='/home/ftp/Radio/p3popular';
+	const DIR='/Volumes/p3popular';
+	#const DIR='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
 	const MINSIZE = '69170187'; //22:00
 	
@@ -77,7 +77,7 @@ class Model{
 			}
 			
 			if($showName == 'p3popular' && ($part == '1' || $part == '2' || $part == 'm' ||$part=='s')){
-				$title = "$year-$month-$day del $part";
+				$title = "$year-$month-$day del $part ";
 			}
 			
 			elseif($showName == 'p1sommar' && ($part == 'p')){
@@ -94,9 +94,11 @@ class Model{
 			switch($part){
 				case 1:
 					$hour = 10;
+					$title.=strftime('%A',strtotime("$year-$month-$day"));
 					break;
 				case 2:
 					$hour = 11;
+					$title.=strftime('%A',strtotime("$year-$month-$day"));
 					break;
 				case 'm':
 					$hour = 13;
@@ -199,6 +201,8 @@ class Controller{
 	
 	
 	public function index(){
+		
+		setlocale(LC_TIME, "sv_SE.UTF-8","sv_SE");
 		
 		#$info = Model::getInfoP1Sommar();
 		
