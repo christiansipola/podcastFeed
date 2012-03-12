@@ -12,6 +12,12 @@ class Model{
 	
 	public $show;
 	
+	/**
+	 * $_SERVER["SERVER_NAME"]
+	 * 
+	 */
+	public $serverName = null; 
+	
 	public function getShowWithLS(){
 	
 		
@@ -120,7 +126,7 @@ class Model{
 			$show[] = array(
 				'title' => $title,
 				'date' => "$year-$month-$day",
-				'url'	=> "http://podcast.sipola.se/$file",
+				'url'	=> "http://{$this->serverName}/$file",
 				'length' => $size,
 				'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
 				#'pubDate' => date_create("@$mtime")->format(DATE_RSS)
@@ -218,7 +224,9 @@ class Controller{
 		}else{
 			$path = '';
 		}
+		
 		$m = new Model();
+		$m->serverName = $_SERVER['SERVER_NAME'];
 		$v = new View();
 		$m->getShow($path);
 		
@@ -256,7 +264,7 @@ class View{
 		
 		$channel->appendChild( $xml->createElement('title','P3 Populär') );
 		$channel->appendChild( $xml->createElement('description','P3 Populär podcast') );
-		$channel->appendChild( $xml->createElement('link','http://podcast.sipola.se/podcastFeed/') );
+		$channel->appendChild( $xml->createElement('link',"http://{$model->serverName}/podcastFeed/") );
 		$channel->appendChild( $xml->createElement('language','sv-se') );
 		$channel->appendChild( $xml->createElement('copyright','Sveriges Radio') );
 		$channel->appendChild( $xml->createElement('lastBuildDate',$build) );
