@@ -3,10 +3,18 @@
 
 class Model{
 	
-	#const DIR='/Volumes/p3popular';
-	const DIR='/home/ftp/Radio/p3popular';
+	#on localhost
+	const DIR='/htdocs/podcastFeed/radio';
+	#on web
+	#const DIR='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
-	const MINSIZE = '69170187'; //22:00
+	#const MINSIZE = '69170187'; //22:00
+	const MINSIZE = '43000000'; //19:30
+	
+	#on localhost
+	public static $fileWebPath = 'podcastFeed/radio/';
+	#on web
+	#public static $fileWebPath = '';
 	
 	public $latestBuild;
 	
@@ -126,7 +134,7 @@ class Model{
 			$show[] = array(
 				'title' => $title,
 				'date' => "$year-$month-$day",
-				'url'	=> "http://{$this->serverName}/$file",
+				'url'	=> "http://{$this->serverName}/".self::$fileWebPath."$file",
 				'length' => $size,
 				'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
 				#'pubDate' => date_create("@$mtime")->format(DATE_RSS)
@@ -199,6 +207,24 @@ class Model{
 		return $return;
 	}
 	
+	public function getDownloadCodeSommar($info){
+
+		$finished = array();
+		foreach($this->show as $key => $s){
+			if( isset($info[$s['date']]) ){
+				$finished[$s['date']] = true;
+			}
+		}
+		
+		foreach($info as $date => $i){
+			if(! isset($finished[$date]) ){
+				$title = $i['title']; 
+				echo "./downloadP3Popular.sh $date p #$title<br />";
+				echo "./downloadP3Popular.sh $date q #$title<br />";
+			}
+		}
+	}
+	
 	
 }
 
@@ -209,8 +235,6 @@ class Controller{
 	public function index(){
 		
 		setlocale(LC_TIME, "sv_SE.UTF-8","sv_SE");
-		
-		#$info = Model::getInfoP1Sommar();
 		
 		/*
 		 * It seems only REQUEST_URI can be relied on
@@ -229,8 +253,9 @@ class Controller{
 		$m->serverName = $_SERVER['SERVER_NAME'];
 		$v = new View();
 		$m->getShow($path);
-		
 		if($path == 'p1sommar'){
+			$info = Model::getInfoP1Sommar();
+			#$m->getDownloadCodeSommar($info);die();
 			$v->renderP1Sommar($m,$info);
 		}else{
 			$v->render($m);
