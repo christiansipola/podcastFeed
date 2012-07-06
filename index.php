@@ -9,7 +9,8 @@ class Model{
 	#const DIR='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
 	#const MINSIZE = '69170187'; //22:00
-	const MINSIZE = '43000000'; //19:30
+	#const MINSIZE = '43000000'; //19:30
+	const MINSIZE = '32000000'; //20:30
 	
 	#on localhost
 	public static $fileWebPath = 'podcastFeed/radio/';
