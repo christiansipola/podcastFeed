@@ -8,7 +8,10 @@
 #                 
 # 
 #   DESCRIPTION:  Download P3Populär
-	#NEEDS: extra codecs to ffmpeg
+#	60 min podcast takes 33 in on MBP to download and convert (without pipe)
+#	30 min podcast takes 16 min
+#
+#       NEEDS: extra codecs to ffmpeg
 #sudo wget http://www.medibuntu.org/sources.list.d/`lsb_release -cs`.list --output-document=/etc/apt/sources.list.d/medibuntu.list && sudo apt-get -q update && sudo apt-get --yes -q --allow-unauthenticated install medibuntu-keyring && sudo apt-get -q update
 #sudo apt-get install ffmpeg libavcodec-extra-52
 #http://ubuntuforums.org/showthread.php?t=1117283
@@ -82,25 +85,22 @@ SUFFIX="mp3"
 # more
 # http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_2012-01-09_210259_3422_a96.m4a
 # 
-
+YEAR=2012
+MONTH=11
 if [ $PART == "1" ]; then
-	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/p3_popular/SRP3_${DATE}_110159_3482_r3.rm"
-	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/p3_popular/SRP3_${DATE}_100159_3482_r3.rm"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Popular/SRP3_${DATE}_100159_3482_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_192959_1802_a192.m4a"
-
+	## TODO add variable for year and month
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_1800_a192.m4a"
 elif [ $PART == "2" ]; then
-	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/p3_popular/SRP3_${DATE}_120459_3302_r3.rm"
-	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/p3_popular/SRP3_${DATE}_110159_3482_r3.rm"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Popular/SRP3_${DATE}_110159_3482_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_200559_3242_a192.m4a" #format 1
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_200559_1442_a192.m4a" #format 2
+	## TODO add variable for year and month
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_3240_a192.m4a" #format 1
+	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_1440_a192.m4a" #format 2, seem to be on wednesdays
 
 elif [ $PART = "m" ]; then
 	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/popnonstop/SRP3_${DATE}_130159_3482_r3.rm"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_120259_3422_a192.m4a"
+	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_120259_3422_a192.m4a"
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/2012/09/SRP3_${DATE}_130300_3420_a192.m4a"
 elif [ $PART = "s" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_182959_3602_a192.m4a"
 	ARTIST="Luuk & Locko"
@@ -142,12 +142,18 @@ fi
 ## download ##
 
 echo "starting to download and convert..."
+date
 curl -v $STREAM -o $PIPE
 #wget $STREAM -O $PIPE &
 
 ## convert ##
 
 ffmpeg -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
+
+date
+
+#os x
+#say "beep beep"
 
 #if [ ! -s "$FILE.mp3" ]; then
 #	echo "filesize is more then 0"

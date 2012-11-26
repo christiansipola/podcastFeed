@@ -182,12 +182,7 @@ class Model{
 		
 		$xml = new SimpleXMLElement($str);
 		if(!$xml->channel->item){
-			echo "Ingen item hittades";
-			echo '<pre>';
-			echo htmlentities($str);
-			echo '</pre>';
-			$html->clear();
-			#return $return;
+			return $return;
 		}
 		
 
@@ -271,6 +266,9 @@ class View{
 	
 	public function render(Model $model){
 		$show = $model->show;
+		if(empty($model->latestBuild)){
+			$model->latestBuild = mktime();
+		}
 		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		#$pub = date_create('now')->format(DATE_RSS);
 		//$pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
@@ -336,6 +334,9 @@ class View{
 	 */
 	public function renderP1Sommar(Model $model,$info){
 		$show = $model->show;
+		if(empty($model->latestBuild)){
+			$model->latestBuild = mktime();
+		}
 		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		#$pub = date_create('now')->format(DATE_RSS);
 		//$pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
