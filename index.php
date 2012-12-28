@@ -157,7 +157,9 @@ class Model{
 		ini_set('user_agent', 'Void/2.5');
 
 		//list
-		$url = 'http://api.sr.se/api/rssfeed/rssfeed.aspx?lyssnaigenfeed=2071';
+		//$url = 'http://api.sr.se/api/rssfeed/rssfeed.aspx?lyssnaigenfeed=2071'; //old url
+		$url = 'http://sverigesradio.se/api/rss/broadcast/2071';
+		
 		if($debug && isset($_SESSION['parse_str'])){ //DEBUG
 			$str = $_SESSION['parse_str'];
 		}else{
@@ -174,12 +176,11 @@ class Model{
 			#echo '<pre>';
 			#echo htmlentities($str);
 			#echo '</pre>';
-			
-			#echo $str;die();
+			#die();
 		}
 
 		$return = array();
-		
+				
 		$xml = new SimpleXMLElement($str);
 		if(!$xml->channel->item){
 			return $return;
@@ -189,7 +190,8 @@ class Model{
 		foreach($xml->channel->item as $i){
 			$title = (string)$i->title;
 			$matches = array();
-			$pattern = '/Sommar i P1 med (.*?) \((.{4}-.{2}-.{2}).*/';
+			#$pattern = '/Sommar i P1 med (.*?) \((.{4}-.{2}-.{2}).*/';
+			$pattern = '/[Vinter|Sommar] i P1 med (.*?) \((.{4}-.{2}-.{2}).*/';
 			preg_match($pattern, $title, $matches);
 			if(! isset($matches[2])){
 				continue;
@@ -198,7 +200,6 @@ class Model{
 			$return[$date] = array('title' => $matches[1].' '.$matches[2], 'desc'=>$title);
 		}
 		unset($xml);
-		
 		$return = array_reverse($return);
 		return $return;
 	}
