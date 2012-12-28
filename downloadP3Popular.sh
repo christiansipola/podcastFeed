@@ -86,7 +86,7 @@ SUFFIX="mp3"
 # http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_2012-01-09_210259_3422_a96.m4a
 # 
 YEAR=2012
-MONTH=11
+MONTH=12
 if [ $PART == "1" ]; then
 	## TODO add variable for year and month
 	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_1800_a192.m4a"
@@ -100,16 +100,19 @@ elif [ $PART = "m" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_120259_3422_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/2012/09/SRP3_${DATE}_130300_3420_a192.m4a"
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_210300_3420_a192.m4a"
+	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/2012/09/SRP3_${DATE}_130300_3420_a192.m4a"
 elif [ $PART = "s" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_182959_3602_a192.m4a"
 	ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
 	STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_125959_3602_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_221159_2882_a192.m4a" 
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_130000_3600_a192.m4a"
 elif [ $PART = "q" ]; then
 	STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_135959_1802_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_225959_2402_a192.m4a"
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_140000_1800_a192.m4a"
 else
 	echo "PART is wrong!"
 	exit 1
