@@ -382,6 +382,9 @@ class View{
 		
 		foreach($show as $key => $s){
 			$item = $channel->appendChild( $xml->createElement('item') );
+			if(!isset($info[$s['date']])){
+				$info[$s['date']] = array('title'=>$s['date'],'desc'=>$s['date']);
+			}
 			#$item->appendChild( $xml->createElement('title',$s['title']) );
 			$item->appendChild( $xml->createElement('title',$info[$s['date']]['title'].' '.$s['title']) );
 			$item->appendChild( $xml->createElement('link','http://sverigesradio.se/sida/default.aspx?programid=2071') );
