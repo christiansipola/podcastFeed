@@ -87,6 +87,8 @@ SUFFIX="mp3"
 # 
 YEAR=2012
 MONTH=12
+YEAR=2013
+MONTH=01
 if [ $PART == "1" ]; then
 	## TODO add variable for year and month
 	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_1800_a192.m4a"
