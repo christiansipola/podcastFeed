@@ -82,20 +82,46 @@ TITLE="$DATE-$PART"
 FILE="podcast-$DATE-$PART"
 SUFFIX="mp3"
 
-# more
-# http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_2012-01-09_210259_3422_a96.m4a
-# 
-YEAR=2012
-MONTH=12
-YEAR=2013
-MONTH=01
+YEAR=${DATE:0:4}
+MONTH=${DATE:5:2}
+DAY=${DATE:8:2}
+
+#%u day of week (1..7); 1 is Monday, j does not change date
+WEEKDAY=`date -j -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
+#WEEKDAY=5
+
 if [ $PART == "1" ]; then
-	## TODO add variable for year and month
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_1800_a192.m4a"
+	 
+	if [ $WEEKDAY == "1" ]; then
+		#monday 
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_9000_a192.m4a"
+		## on a monday 18 mars
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_12600_a192.m4a"
+
+	elif [ $WEEKDAY == "2" ]; then
+		#tuesday
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_5400_a192.m4a"
+			
+	elif [ $WEEKDAY == "3" ]; then
+		#wednesday
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_3600_a192.m4a"
+		
+	elif [ $WEEKDAY == "4" ]; then
+		#thursday? 
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_9000_a192.m4a"
+		
+	else
+		#used?
+		#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_7200_a192.m4a"
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_1800_a192.m4a"
+		
+	fi
+
+
 elif [ $PART == "2" ]; then
 	## TODO add variable for year and month
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_3240_a192.m4a" #format 1
-	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_1440_a192.m4a" #format 2, seem to be on wednesdays
+	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_3240_a192.m4a" #format 1
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_1440_a192.m4a" #format 2, seem to be on wednesdays
 
 elif [ $PART = "m" ]; then
 	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/popnonstop/SRP3_${DATE}_130159_3482_r3.rm"
@@ -150,7 +176,34 @@ fi
 
 echo "starting to download and convert..."
 date
-curl -v $STREAM -o $PIPE
+## -f is fail silently when 404 and set exit status
+curl -f -v $STREAM -o $PIPE
+
+if [ $? == "22" ]; then
+
+	echo "could not find $STREAM. trying other lengths"
+	
+	LIST="1800 3600 5400 7200 9000 10800 12600"
+	
+	for LENGTH in $LIST 
+	do
+		echo "trying length ${LENGTH}"
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_${LENGTH}_a192.m4a"
+		curl -f -v $STREAM -o $PIPE
+		if [ $? != "22" ]; then
+			break
+		else
+			echo "$LENGTH failed."
+		fi
+	done
+	
+fi
+
+if [ $? == "22" ]; then
+ echo "could not find show. exiting."
+ ##exit
+fi
+
 #wget $STREAM -O $PIPE &
 
 ## convert ##
