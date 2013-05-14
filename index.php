@@ -4,7 +4,7 @@
 class Model{
 	
 	#on localhost
-	const DIR='/htdocs/podcastFeed/radio';
+	const DIR='/srv/aiai/aiai/podcastFeed/radio';
 	#on web
 	#const DIR='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
@@ -268,7 +268,7 @@ class View{
 	public function render(Model $model){
 		$show = $model->show;
 		if(empty($model->latestBuild)){
-			$model->latestBuild = mktime();
+			$model->latestBuild = time();
 		}
 		$build = date_create('@'.$model->latestBuild)->format(DATE_RSS);
 		#$pub = date_create('now')->format(DATE_RSS);

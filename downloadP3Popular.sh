@@ -96,7 +96,7 @@ if [ $PART == "1" ]; then
 		#monday 
 		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_9000_a192.m4a"
 		## on a monday 18 mars
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_12600_a192.m4a"
+		#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_12600_a192.m4a"
 
 	elif [ $WEEKDAY == "2" ]; then
 		#tuesday
@@ -146,7 +146,7 @@ else
 	exit 1
 fi
 
-cd /htdocs/podcastFeed/radio
+cd ~/git/aiai/aiai/podcastFeed/radio
 if [ -a "$FILE.$SUFFIX" ] ; then
 	if [ "$FORCE" == "true" ] ; then
 		echo "file $FILE.$SUFFIX already exist but it wil be overwritten!"
