@@ -4,7 +4,7 @@
 class Model{
 	
 	#on localhost
-	const DIR='/srv/aiai/aiai/podcastFeed/radio';
+	const DIR='/srv/unofficial/podcastFeed/radio';
 	#on web
 	#const DIR='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
