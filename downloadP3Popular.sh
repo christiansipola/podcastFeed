@@ -146,7 +146,7 @@ else
 	exit 1
 fi
 
-cd ~/git/aiai/aiai/podcastFeed/radio
+cd ~/git/unofficial/podcastFeed/radio
 if [ -a "$FILE.$SUFFIX" ] ; then
 	if [ "$FORCE" == "true" ] ; then
 		echo "file $FILE.$SUFFIX already exist but it wil be overwritten!"
