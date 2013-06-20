@@ -179,16 +179,18 @@ date
 ## -f is fail silently when 404 and set exit status
 curl -f -v $STREAM -o $PIPE
 
-if [ $? == "22" ]; then
 
+if [ $? == "22" ]; then
+	START="1803"
 	echo "could not find $STREAM. trying other lengths"
 	
-	LIST="1800 3600 5400 7200 9000 10800 12600"
+	LIST00="1800 3600 5400 7200 9000 10800 12600"
+	LIST03="8820 7020 5220 3420"
 	
-	for LENGTH in $LIST 
+	for LENGTH in $LIST03 
 	do
 		echo "trying length ${LENGTH}"
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_${LENGTH}_a192.m4a"
+		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_${START}00_${LENGTH}_a192.m4a"
 		curl -f -v $STREAM -o $PIPE
 		if [ $? != "22" ]; then
 			break
