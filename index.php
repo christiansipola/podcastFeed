@@ -96,7 +96,8 @@ class Model{
 			}
 			
 			elseif($showName == 'p1sommar' && ($part == 'p')){
-				$title = "del 1";
+				#$title = "del 1"; //not many parts anymore
+				$title = "";
 			}
 			elseif($showName == 'p1sommar' && ($part == 'q')){
 				$title = "del 2";
@@ -217,7 +218,7 @@ class Model{
 			if(! isset($finished[$date]) ){
 				$title = $i['title']; 
 				echo "./downloadP3Popular.sh $date p #$title<br />";
-				echo "./downloadP3Popular.sh $date q #$title<br />";
+				#echo "./downloadP3Popular.sh $date q #$title<br />"; //not many parts anymore
 			}
 		}
 	}
