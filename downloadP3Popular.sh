@@ -117,12 +117,15 @@ if [ $PART == "1" ]; then
 		
 	fi
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+	START="1803"
 
 
 elif [ $PART == "2" ]; then
 	## TODO add variable for year and month
-	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_3240_a192.m4a" #format 1
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_1440_a192.m4a" #format 2, seem to be on wednesdays
+	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_3240_a192.m4a"
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_190600_1440_a192.m4a"
+	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+	START="1903"
 
 elif [ $PART = "m" ]; then
 	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/popnonstop/SRP3_${DATE}_130159_3482_r3.rm"
@@ -131,6 +134,8 @@ elif [ $PART = "m" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_120259_3422_a192.m4a"
 	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_210300_3420_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/2012/09/SRP3_${DATE}_130300_3420_a192.m4a"
+	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+	START="2006"
 	
 elif [ $PART = "s" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_182959_3602_a192.m4a"
@@ -143,7 +148,7 @@ elif [ $PART = "p" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_130000_3600_a192.m4a"
 	
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
-	
+	START="1300"
 	
 elif [ $PART = "q" ]; then
 	STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_135959_1802_a192.m4a"
@@ -189,14 +194,22 @@ curl -f -v $STREAM -o $PIPE
 
 
 if [ $? == "22" ]; then
-	START="1300"
 	echo "could not find $STREAM. trying other lengths"
 	
 	LIST00="1800 3600 5400 7200 9000 10800 12600"
 	LIST03="8820 7020 5220 3420"
-	#LIST=$LIST00
+	LIST06="1440 3240"
+	STARTMINUTE=${START:2:2}
+	if [ $STARTMINUTE == "00" ]; then
+		LIST=$LIST00
+	elif [ $STARTMINUTE == "03" ]; then
+		LIST=$LIST03
+	elif [ $STARTMINUTE == "06" ]; then
+	  LIST=$LIST06
+	fi
 	
-	for LENGTH in $LIST00 
+	
+	for LENGTH in $LIST 
 	do
 		echo "trying length ${LENGTH}"
 		#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_${START}00_${LENGTH}_a192.m4a"
