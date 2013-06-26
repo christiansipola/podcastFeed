@@ -255,6 +255,7 @@ class Controller{
 		}
 		else{
 			Model::$filePathDir = Model::DIR_WEB;
+			Model::$fileWebPath = '';
 		}
 		
 		$m = new Model();
