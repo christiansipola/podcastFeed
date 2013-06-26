@@ -5,12 +5,15 @@ class Model{
 	
 	#on localhost
 	const DIR='/srv/unofficial/podcastFeed/radio';
+	const DIR_LOCAL='/srv/unofficial/podcastFeed/radio';
 	#on web
-	#const DIR='/home/ftp/Radio/p3popular';
+	const DIR_WEB='/home/ftp/Radio/p3popular';
 	#const MINSIZE = '81095911';
 	#const MINSIZE = '69170187'; //22:00
 	#const MINSIZE = '43000000'; //19:30
 	const MINSIZE = '32000000'; //20:30
+	
+	public static $filePathDir = NULL;
 	
 	#on localhost
 	public static $fileWebPath = 'podcastFeed/radio/';
@@ -30,7 +33,7 @@ class Model{
 	public function getShowWithLS(){
 	
 		
-		chdir(self::DIR);
+		chdir(self::$filePathDir);
 		$ls = `ls -l p3Pop*`;
 		$file = array_slice(explode("\n",$ls),-21,20);
 		foreach($file as $f){
@@ -58,11 +61,11 @@ class Model{
 	 */
 	public function getShow($showName){
 		
-		if(! is_dir(self::DIR)){
-			throw new Exception('directory '.self::DIR.' does not exist');
+		if(! is_dir(self::$filePathDir)){
+			throw new Exception('directory '.self::$filePathDir.' does not exist');
 		}
-		chdir(self::DIR);
-		$dir = scandir(self::DIR);
+		chdir(self::$filePathDir);
+		$dir = scandir(self::$filePathDir);
 		$show = array();
 		
 		foreach($dir as $file){
@@ -70,7 +73,7 @@ class Model{
 			if($start != 'podcast'){
 				continue;
 			}
-			$size = filesize(self::DIR.'/'.$file);
+			$size = filesize(self::$filePathDir.'/'.$file);
 			$tmp = explode("-",$file);
 			if(count($tmp) < 4){
 				continue;
@@ -86,7 +89,7 @@ class Model{
 			if($part != 'q' && $size < self::MINSIZE){
 				continue;
 			}
-			$mtime = filemtime(self::DIR.'/'.$file);
+			$mtime = filemtime(self::$filePathDir.'/'.$file);
 			if($mtime > $this->latestBuild){
 				$this->latestBuild = $mtime;
 			}
@@ -245,6 +248,13 @@ class Controller{
 			$path = str_ireplace('/podcastFeed/','',$path);
 		}else{
 			$path = '';
+		}
+		
+		if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == 'htdocs.local'){
+			Model::$filePathDir = Model::DIR_LOCAL;
+		}
+		else{
+			Model::$filePathDir = Model::DIR_WEB;
 		}
 		
 		$m = new Model();
