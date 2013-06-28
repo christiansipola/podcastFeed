@@ -197,7 +197,7 @@ if [ $? == "22" ]; then
 	echo "could not find $STREAM. trying other lengths"
 	
 	LIST00="1800 3600 5400 7200 9000 10800 12600"
-	LIST03="8820 7020 5220 3420"
+	LIST03="3420 5220 7020  8820"
 	LIST06="1440 3240"
 	STARTMINUTE=${START:2:2}
 	if [ $STARTMINUTE == "00" ]; then
