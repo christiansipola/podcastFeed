@@ -144,8 +144,9 @@ elif [ $PART = "s" ]; then
 elif [ $PART = "p" ]; then
 
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_125959_3602_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_221159_2882_a192.m4a"
+	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_221159_2882_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_130000_3600_a192.m4a"
+	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_130000_5400_a192.m4a"
 	
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
 	START="1300"
@@ -199,6 +200,7 @@ if [ $? == "22" ]; then
 	LIST00="1800 3600 5400 7200 9000 10800 12600"
 	LIST03="3420 5220 7020  8820"
 	LIST06="1440 3240"
+	LIST="5520"
 	STARTMINUTE=${START:2:2}
 	if [ $STARTMINUTE == "00" ]; then
 		LIST=$LIST00
