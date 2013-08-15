@@ -162,8 +162,15 @@ class Model{
 
 		//list
 		//$url = 'http://api.sr.se/api/rssfeed/rssfeed.aspx?lyssnaigenfeed=2071'; //old url
-		$url = 'http://sverigesradio.se/api/rss/broadcast/2071';
+		//broadcast. original byut short desc
+		#$url = 'http://sverigesradio.se/api/rss/broadcast/2071';
 		
+		//pod sommar   more desc
+		$url = 'http://api.sr.se/api/rss/pod/4023';
+		
+		//program little more desc. atom format
+		#$url = 'http://api.sr.se/api/rss/program/2071';
+		 
 		if($debug && isset($_SESSION['parse_str'])){ //DEBUG
 			$str = $_SESSION['parse_str'];
 		}else{
@@ -179,33 +186,82 @@ class Model{
 			$_SESSION['parse_str'] = $str;
 			#echo '<pre>';
 			#echo htmlentities($str);
+			#echo $str;
 			#echo '</pre>';
 			#die();
 		}
 
 		$return = array();
-				
+
+		#echo $str;die();
+		
 		$xml = new SimpleXMLElement($str);
 		if(!$xml->channel->item){
 			return $return;
 		}
 		
-
-		foreach($xml->channel->item as $i){
+		
+		$empty = array();
+		
+		// /broadcast parser
+		foreach($empty as $e){
+		#foreach($xml->channel->item as $i){
 			$title = (string)$i->title;
 			$matches = array();
-			#$pattern = '/Sommar i P1 med (.*?) \((.{4}-.{2}-.{2}).*/';
 			$pattern = '/[Vinter|Sommar] i P1 med (.*?) \((.{4}-.{2}-.{2}).*/';
+			$desc = (string)$i->description;
 			preg_match($pattern, $title, $matches);
 			if(! isset($matches[2])){
 				continue;
 			}
 			$date = $matches[2];
-			$return[$date] = array('title' => $matches[1].' '.$matches[2], 'desc'=>$title);
+			$return[$date] = array('title' => $matches[1].' '.$matches[2], 'desc'=>$title); //."\n".$desc
 		}
+		
+		// /pod parser
+		foreach($xml->channel->item as $i){
+			$title = (string)$i->title; //Karin Adelsköld
+			$matches = array();
+			$pattern = '/(.*?)sommar_i_p1_(.{4})(.{2})(.{2}).*/'; //todo fix for winter
+			$desc = (string)$i->description;
+			
+			preg_match($pattern, $i->guid, $matches);
+			if(! isset($matches[2])){
+				continue;
+			}
+			
+			$date = $matches[2].'-'.$matches[3].'-'.$matches[4];
+			
+			//add whitespace in desc
+			#$desc = 'blöÅr    blåÄr'; //for testing
+			#$desc = 'bloAr    blaAr'; //for testing
+			$desc = self::lcucaddwhitespace($desc);
+			$desc = self::lcucaddwhitespace($desc);
+			$title .= ' '.$date;
+			$return[$date] = array('title' => $title, 'desc'=>$desc);
+			#var_dump($desc);die();
+		}
+		
 		unset($xml);
 		$return = array_reverse($return);
 		return $return;
+	}
+	
+	/*
+	 * lower case upper case add whitespace between
+	 */
+	public static function lcucaddwhitespace($desc){
+		$matches = array();
+		#$pattern = '/(.*?[[:lower:]]{1})([[:upper:]]{1}.*)/'; //åäö nåt working.
+		$pattern = '/(.*?[a-z]{1})([A-Z]{1}.*)/'; //åäö not working
+		preg_match($pattern, $desc, $matches);
+		if(! isset($matches[1])){
+			return $desc;
+		}
+		$desc = $matches[1].'. '.$matches[2];
+		
+		return $desc;
+		
 	}
 	
 	public function getDownloadCodeSommar($info){
