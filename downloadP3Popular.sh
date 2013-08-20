@@ -126,6 +126,7 @@ elif [ $PART == "2" ]; then
 	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_190600_1440_a192.m4a"
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	START="1903"
+	START="1930"
 
 elif [ $PART = "m" ]; then
 	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/popnonstop/SRP3_${DATE}_130159_3482_r3.rm"
@@ -200,6 +201,7 @@ if [ $? == "22" ]; then
 	LIST00="1800 3600 5400 7200 9000 10800 12600"
 	LIST03="3420 5220 7020  8820"
 	LIST06="1440 3240"
+	LIST30="9000"
 	LIST="5520"
 	STARTMINUTE=${START:2:2}
 	if [ $STARTMINUTE == "00" ]; then
@@ -208,6 +210,8 @@ if [ $? == "22" ]; then
 		LIST=$LIST03
 	elif [ $STARTMINUTE == "06" ]; then
 	  LIST=$LIST06
+	elif [ $STARTMINUTE == "30" ]; then
+	  LIST=$LIST30
 	fi
 	
 	
