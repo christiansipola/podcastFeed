@@ -201,7 +201,6 @@ if [ $? == "22" ]; then
 	LIST00="1800 3600 5400 7200 9000 10800 12600"
 	LIST03="3420 5220 7020  8820"
 	LIST06="1440 3240"
-	LIST30="1800 9000"
 	LIST="5520"
 	STARTMINUTE=${START:2:2}
 	if [ $STARTMINUTE == "00" ]; then
@@ -211,7 +210,7 @@ if [ $? == "22" ]; then
 	elif [ $STARTMINUTE == "06" ]; then
 	  LIST=$LIST06
 	elif [ $STARTMINUTE == "30" ]; then
-	  LIST=$LIST30
+	  LIST=$LIST00
 	fi
 	
 	
