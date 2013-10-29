@@ -82,6 +82,7 @@ DAY=${DATE:8:2}
 #%u day of week (1..7); 1 is Monday, j does not change date
 WEEKDAY=`date -j -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
 #WEEKDAY=5
+BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
@@ -90,34 +91,20 @@ elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	START="1930"
 	#BASE="http://lyssna.sr.se/isidor/ereg/p3_stockholm/2013/10/7_musikguiden_i_p3_med_tina_2946983_a192.m4a"
+	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
-	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/popnonstop/SRP3_${DATE}_130159_3482_r3.rm"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_120259_3422_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_210300_3420_a192.m4a"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/2012/09/SRP3_${DATE}_130300_3420_a192.m4a"
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	START="2006"
-	
 elif [ $PART = "s" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_182959_3602_a192.m4a"
 	ARTIST="Luuk & Locko"
-	
 elif [ $PART = "p" ]; then
-
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_125959_3602_a192.m4a"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_221159_2882_a192.m4a"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_130000_3600_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_130000_5400_a192.m4a"
-	
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
 	START="1300"
-	
 elif [ $PART = "q" ]; then
-	STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_135959_1802_a192.m4a"
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P1/Sommar_i_P1/SRP1_${DATE}_225959_2402_a192.m4a"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_140000_1800_a192.m4a"
+	echo "nothing to do. exit"
+	exit 1
 else
 	echo "PART is wrong!"
 	exit 1
@@ -153,43 +140,38 @@ fi
 
 echo "starting to download and convert..."
 date
-## -f is fail silently when 404 and set exit status
-curl -f -v $STREAM -o $PIPE
 
-
-if [ $? == "22" ]; then
-	echo "could not find $STREAM. trying other lengths"
-	
-	LIST00="1800 3600 5400 7200 9000 10800 12600"
-	LIST03="3420 5220 7020  8820"
-	LIST06="1440 3240"
-	LIST="5520"
-	STARTMINUTE=${START:2:2}
-	if [ $STARTMINUTE == "00" ]; then
-		LIST=$LIST00
-	elif [ $STARTMINUTE == "03" ]; then
-		LIST=$LIST03
-	elif [ $STARTMINUTE == "06" ]; then
-	  LIST=$LIST06
-	elif [ $STARTMINUTE == "30" ]; then
-	  LIST=$LIST00
-	fi
-	
-	
-	for LENGTH in $LIST 
-	do
-		echo "trying length ${LENGTH}"
-		STREAM="${BASE}${DATE}_${START}00_${LENGTH}_a192.m4a"
-		#STREAM=$BASE
-		curl -f -v $STREAM -o $PIPE
-		if [ $? != "22" ]; then
-			break
-		else
-			echo "$LENGTH failed."
-		fi
-	done
-	
+LIST00="1800 3600 5400 7200 9000 10800 12600"
+LIST03="3420 5220 7020  8820"
+LIST06="1440 3240"
+LIST="5520"
+STARTMINUTE=${START:2:2}
+if [ $STARTMINUTE == "00" ]; then
+	LIST=$LIST00
+elif [ $STARTMINUTE == "03" ]; then
+	LIST=$LIST03
+elif [ $STARTMINUTE == "06" ]; then
+  LIST=$LIST06
+elif [ $STARTMINUTE == "30" ]; then
+  LIST=$LIST00
 fi
+
+
+for LENGTH in $LIST 
+do
+	echo "trying length ${LENGTH}"
+	STREAM="${BASE}${DATE}_${START}00_${LENGTH}_a192.m4a"
+	if [ $BASE_IS_STREAM == 1 ]; then
+	  STREAM=$BASE
+	fi
+	curl -f -v $STREAM -o $PIPE
+	if [ $? != "22" ]; then
+		break
+	else
+		echo "$LENGTH failed."
+	fi
+done
+	
 
 if [ $? == "22" ]; then
  echo "could not find show. exiting."
