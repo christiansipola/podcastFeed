@@ -67,13 +67,6 @@ else
   PART="1"
 fi
 
-#echo "$FORCE $DATE $PART"
-#exit
-##set manually
-#DATE="2009-09-09"
-#PART="1"
-## Uncomment below for special shows
-#DATE="2007-10-06"
 #PART="s"
 ## UTF-8 does not seem to work 
 ARTIST="P3Popular"
@@ -91,43 +84,12 @@ WEEKDAY=`date -j -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
 #WEEKDAY=5
 
 if [ $PART == "1" ]; then
-	 
-	if [ $WEEKDAY == "1" ]; then
-		#monday 
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_9000_a192.m4a"
-		## on a monday 18 mars
-		#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_12600_a192.m4a"
-
-	elif [ $WEEKDAY == "2" ]; then
-		#tuesday
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_5400_a192.m4a"
-			
-	elif [ $WEEKDAY == "3" ]; then
-		#wednesday
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_3600_a192.m4a"
-		
-	elif [ $WEEKDAY == "4" ]; then
-		#thursday? 
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_9000_a192.m4a"
-		
-	else
-		#used?
-		#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_7200_a192.m4a"
-		STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_193000_1800_a192.m4a"
-		
-	fi
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	START="1803"
-
-
 elif [ $PART == "2" ]; then
-	## TODO add variable for year and month
-	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_200600_3240_a192.m4a"
-	STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_190600_1440_a192.m4a"
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="1903"
 	START="1930"
-
+	#BASE="http://lyssna.sr.se/isidor/ereg/p3_stockholm/2013/10/7_musikguiden_i_p3_med_tina_2946983_a192.m4a"
 elif [ $PART = "m" ]; then
 	#STREAM="rtsp://lyssna-rm.sr.se/autorec/p3/popnonstop/SRP3_${DATE}_130159_3482_r3.rm"
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/P3_Musik/SRP3_${DATE}_130159_3482_a192.m4a"
@@ -217,8 +179,8 @@ if [ $? == "22" ]; then
 	for LENGTH in $LIST 
 	do
 		echo "trying length ${LENGTH}"
-		#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_${DATE}_${START}00_${LENGTH}_a192.m4a"
 		STREAM="${BASE}${DATE}_${START}00_${LENGTH}_a192.m4a"
+		#STREAM=$BASE
 		curl -f -v $STREAM -o $PIPE
 		if [ $? != "22" ]; then
 			break
@@ -234,8 +196,6 @@ if [ $? == "22" ]; then
  ##exit
 fi
 
-#wget $STREAM -O $PIPE &
-
 ## convert ##
 
 ffmpeg -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
@@ -244,25 +204,6 @@ date
 
 #os x
 #say "beep beep"
-
-#if [ ! -s "$FILE.mp3" ]; then
-#	echo "filesize is more then 0"
-#else
-#	echo "filesize is 0. aborting!
-#	exit 1
-#fi
-
-
-#not working os os x
-#ffmpeg -v 5 -y -i $PIPE -acodec libmp3lame -ac 2 -ab 192k "$FILE.mp3"
-#ffmpeg -v 5 -y -i $FILE.m4a -acodec libmp3lame -ac 2 -ab 192k "$FILE.mp3"
-#ffmpeg -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
-
-#afconvert -f m4af -v -d aac -b 128000 $PIPE "FILE.m4a"
-#afconvert -f m4af -d aac $FILE.m4a "FILE-2.m4a"
-#afconvert -f mp4f -v -d aac orig.m4a "FILE-2.m4a"
-
-#ffmpeg -v 5 -y -i "p3Populär-2011-04-13-2.m4a" -acodec libmp3lame  -ac 2 -ab 192k "test.mp3"
 
 ## remove pipe ##
 rm -f $PIPE
@@ -274,14 +215,3 @@ fi
 
 echo "finished"
 exit 0
-#mplayer -quiet -vc null -vo null -ao pcm:file=$PIPE $STREAM &
-#afconvert -f m4af -v -d aac -b 128000 pipe P3Populär-2009-04-07-1.m4a
-#lame -b 192 --tt "$DATE-$PART" --ta "P3Popular" --tl "P3Popular" $PIPE "p3Populär-$DATE-$PART.mp3"
-#lame -b 192 --tt "$TITLE" --ta "$ARTIST" --tl "$ALBUM" test "$FILE.mp3"
-#lame --scale 3 -b 192 --tt "$TITLE" --ta "$ARTIST" --tl "$ALBUM" $PIPE $FILE.$SUFFIX 
-#rm -f $PIPE
-
-echo "finished!"
-exit 0
-
-
