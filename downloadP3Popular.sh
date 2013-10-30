@@ -58,13 +58,15 @@ if [ ${#args[$INDEX]} -gt 1 ]; then
   DATE=${args[$INDEX]} 
   let "INDEX+=1";
 else
-  DATE=`date +%Y-%m-%d`
+  #yesterday as default (=minus 1 day)
+  DATE=`date -v-1d +%Y-%m-%d` 
 fi
 
 if [ ${#args[$INDEX]} -eq 1 ]; then
   PART=${args[$INDEX]} 
 else
-  PART="1"
+  #part 2 as defualt
+  PART="2"
 fi
 
 #PART="s"
