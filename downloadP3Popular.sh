@@ -43,15 +43,16 @@ for arg in "$@"
 do
   args[$INDEX]=$arg;
   let "INDEX+=1";
-done  
+done
 
 INDEX=1;
-
-if [ ${args[$INDEX]} ==  "-f" ]; then
-  FORCE=true;
-  let "INDEX+=1";
-else
-  FORCE=false;
+FORCE=false
+## $# is number of args
+if [ $# != 0 ]; then
+    if [ ${args[$INDEX]} ==  "-f" ]; then
+      FORCE=true;
+      let "INDEX+=1";
+    fi
 fi
 
 if [ ${#args[$INDEX]} -gt 1 ]; then
