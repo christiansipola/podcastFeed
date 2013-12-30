@@ -89,21 +89,22 @@ BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="1803"
+	START="180300"
 elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="1930"
+	START="193000"
 	#BASE="http://lyssna.sr.se/isidor/ereg/p3_stockholm/2013/10/7_musikguiden_i_p3_med_tina_2946983_a192.m4a"
 	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="2006"
+	START="200600"
 elif [ $PART = "s" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_182959_3602_a192.m4a"
 	ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
-	START="1300"
+	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
+	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
+	START="130000"
 elif [ $PART = "q" ]; then
 	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_140000_1800_a192.m4a"
 	echo "nothing to do. exit"
@@ -145,17 +146,20 @@ echo "starting to download and convert..."
 date
 
 LIST00="1800 3600 5400 7200 9000 10800 12600"
+LIST0030="5220"
 LIST03="3420 5220 7020  8820"
 LIST06="1440 3240"
 LIST="5520"
-STARTMINUTE=${START:2:2}
-if [ $STARTMINUTE == "00" ]; then
+STARTMINUTE=${START:2:4}
+if [ $STARTMINUTE == "0000" ]; then
 	LIST=$LIST00
-elif [ $STARTMINUTE == "03" ]; then
+elif [ $STARTMINUTE == "0030" ]; then
+	LIST=$LIST0030
+elif [ $STARTMINUTE == "0300" ]; then
 	LIST=$LIST03
-elif [ $STARTMINUTE == "06" ]; then
+elif [ $STARTMINUTE == "0600" ]; then
   LIST=$LIST06
-elif [ $STARTMINUTE == "30" ]; then
+elif [ $STARTMINUTE == "3000" ]; then
   LIST=$LIST00
 fi
 
@@ -163,7 +167,7 @@ fi
 for LENGTH in $LIST 
 do
 	echo "trying length ${LENGTH}"
-	STREAM="${BASE}${DATE}_${START}00_${LENGTH}_a192.m4a"
+	STREAM="${BASE}${DATE}_${START}_${LENGTH}_a192.m4a"
 	if [ $BASE_IS_STREAM == 1 ]; then
 	  STREAM=$BASE
 	fi
