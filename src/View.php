@@ -5,6 +5,11 @@ namespace Zippo;
 class View
 {
 
+    /**
+     * 
+     * @param Model $model
+     * @return string
+     */
     public function render(Model $model)
     {
         $show = $model->show;
@@ -62,14 +67,15 @@ class View
             $item->appendChild($xml->createElement('category', 'Podcasts'));
             $item->appendChild($xml->createElement('pubDate', $s['pubDate']));
         }
-        header('Content-Type: application/xml');
-        echo $xml->saveXML();
+        
+        return $xml->saveXML();
     }
 
     /**
      *
      * @param Model $model            
      * @param array $info            
+     * @return string
      */
     public function renderP1Sommar(Model $model, $info)
     {
@@ -139,7 +145,6 @@ class View
             $item->appendChild($xml->createElement('category', 'Podcasts'));
             $item->appendChild($xml->createElement('pubDate', $s['pubDate']));
         }
-        header('Content-Type: application/xml');
-        echo $xml->saveXML();
+        return $xml->saveXML();
     }
 }

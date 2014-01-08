@@ -15,6 +15,9 @@ class Model
     // const MINSIZE = '69170187'; //22:00
     // const MINSIZE = '43000000'; //19:30
     const MINSIZE = '32000000'; // 20:30
+    
+    const SHOW_P1SOMMAR = 'p1sommar';
+    
     public static $filePathDir = null;
     
     // on localhost
@@ -55,12 +58,21 @@ class Model
         }
     }
 
+    public function genShowP1Sommar()
+    {
+        return $this->getShow('p1sommar');
+    }
+    
+    public function genShowP3musikguiden()
+    {
+        return $this->getShow('p3popular');
+    }
     /**
      *
      * @param string $show
      *            p1sommar or p3popular or p3musik
      */
-    public function getShow($showName)
+    private function getShow($showName)
     {
         if (! is_dir(self::$filePathDir)) {
             throw new \Exception('directory ' . self::$filePathDir . ' does not exist');

@@ -12,20 +12,26 @@ $app['debug'] = true;
 
 $app->get('/', function () {
     $c = new Controller();
-    $c->musikguiden();
-    return new Response('', 200);
+    $output = $c->musikguiden();
+    $response = new Response($output, Response::HTTP_OK);
+    $response->headers->set('Content-Type','application/xml');
+    return $response;
 });
 
 $app->get('/p3popular', function () {
     $c = new Controller();
-    $c->musikguiden();
-    return new Response('', 200);
+    $output = $c->musikguiden();
+    $response = new Response($output, Response::HTTP_OK);
+    $response->headers->set('Content-Type','application/xml');
+    return $response;
 });
 
 $app->get('/p1sommar', function () {
     $c = new Controller();
-    $c->sommar();
-    return new Response('', 200);
+    $output = $c->sommar();
+    $response = new Response($output, Response::HTTP_OK);
+    $response->headers->set('Content-Type','application/xml');
+    return $response;
 });
     
 $app->run();

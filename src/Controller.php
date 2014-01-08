@@ -22,8 +22,8 @@ class Controller
         $m = new Model();
         $m->serverName = $_SERVER['SERVER_NAME'];
         $v = new View();
-        $m->getShow('p3popular');
-        $v->render($m);
+        $m->genShowP3musikguiden();
+        return $v->render($m);
     }
     
     public function sommar()
@@ -31,8 +31,8 @@ class Controller
         $m = new Model();
         $m->serverName = $_SERVER['SERVER_NAME'];
         $v = new View();
-        $m->getShow('p1sommar');
+        $m->genShowP1Sommar();
         $info = Model::getInfoP1Sommar();
-        $v->renderP1Sommar($m, $info);
+        return $v->renderP1Sommar($m, $info);
     }
 }
