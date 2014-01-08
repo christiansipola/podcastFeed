@@ -12,7 +12,10 @@
 #	30 min podcast takes 16 min
 #
 #       NEEDS: extra codecs to ffmpeg
-#sudo wget http://www.medibuntu.org/sources.list.d/`lsb_release -cs`.list --output-document=/etc/apt/sources.list.d/medibuntu.list && sudo apt-get -q update && sudo apt-get --yes -q --allow-unauthenticated install medibuntu-keyring && sudo apt-get -q update
+# sudo wget http://www.medibuntu.org/sources.list.d/`lsb_release \
+# -cs`.list --output-document=/etc/apt/sources.list.d/medibuntu.list \
+# && sudo apt-get -q update && sudo apt-get --yes -q --allow-unauthenticated \
+# install medibuntu-keyring && sudo apt-get -q update
 #sudo apt-get install ffmpeg libavcodec-extra-52
 #http://ubuntuforums.org/showthread.php?t=1117283
 # 
@@ -92,21 +95,18 @@ if [ $PART == "1" ]; then
 	START="180300"
 elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="193000"
-	#BASE="http://lyssna.sr.se/isidor/ereg/p3_stockholm/2013/10/7_musikguiden_i_p3_med_tina_2946983_a192.m4a"
+	START="183000"
 	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	START="200600"
 elif [ $PART = "s" ]; then
-	#STREAM="http://lyssnaigen.sr.se/Autorec/P3/Musikguiden_i_P3/SRP3_${DATE}_182959_3602_a192.m4a"
 	ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
 	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
 	START="130000"
 elif [ $PART = "q" ]; then
-	#STREAM="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_${DATE}_140000_1800_a192.m4a"
 	echo "nothing to do. exit"
 	exit 1
 else
