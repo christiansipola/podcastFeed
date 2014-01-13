@@ -2,6 +2,8 @@
 
 namespace Zippo;
 
+use Zippo\FileMeta;
+
 class Model
 {
     
