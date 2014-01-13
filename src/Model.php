@@ -85,7 +85,6 @@ class Model
         }
         chdir(self::$filePathDir);
         $dir = scandir(self::$filePathDir);
-        $show = array();
         
         $collection = new \ArrayObject();
         
