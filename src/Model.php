@@ -150,12 +150,14 @@ class Model
         return;
     }
 
-    public static function getInfoP1Sommar()
+    /**
+     * @return \SimpleXMLElement
+     */
+    private static function getXmlForSommar()
     {
         $debug = false;
         
         ini_set('user_agent', 'Void/2.5');
-        
         
         // pod sommar more desc
         $url = 'http://api.sr.se/api/rss/pod/4023';
@@ -163,8 +165,6 @@ class Model
         if ($debug && isset($_SESSION['parse_str'])) { // DEBUG
             $str = $_SESSION['parse_str'];
         } else {
-            // echo "fetch!";
-            
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -174,10 +174,15 @@ class Model
             curl_close($curl);
             $_SESSION['parse_str'] = $str;
         }
+        $xml = new \SimpleXMLElement($str);
+        return $xml;
+    }
+    
+    public static function getInfoP1Sommar()
+    {
+        $xml = self::getXmlForSommar();
         
         $return = array();
-        
-        $xml = new \SimpleXMLElement($str);
         if (! $xml->channel->item) {
             return $return;
         }
