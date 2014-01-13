@@ -157,8 +157,6 @@ class Model
     {
         $debug = false;
         
-        ini_set('user_agent', 'Void/2.5');
-        
         // pod sommar more desc
         $url = 'http://api.sr.se/api/rss/pod/4023';
         

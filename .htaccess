@@ -9,3 +9,6 @@
     # Rewrite to index.php/URL
     RewriteRule ^ index.php [QSA,L]
 </IfModule>
+
+## probably needed by curl against SR
+php_value  user_agent 'Void/2.5'
