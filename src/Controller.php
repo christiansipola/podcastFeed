@@ -2,6 +2,9 @@
 
 namespace Zippo;
 
+//insight can not find otherwise. why?
+use Zippo\Model; 
+use Zippo\View;
 
 class Controller
 {

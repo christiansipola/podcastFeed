@@ -11,9 +11,6 @@ class Model
     const DIR_LOCAL = '/srv/unofficial/podcastFeed/radio';
     // on web
     const DIR_WEB = '/home/ftp/Radio/p3popular';
-    // const MINSIZE = '81095911';
-    // const MINSIZE = '69170187'; //22:00
-    // const MINSIZE = '43000000'; //19:30
     const MINSIZE = '32000000'; // 20:30
     
     const SHOW_P1SOMMAR = 'p1sommar';
@@ -44,10 +41,6 @@ class Model
             $pattern = '/.*(.{3} .{1} .{2}:.{2}) p3Populär-(.{10})-(.{1})\.mp3/';
             $pattern = '/.*(\S{3} \S{1} \S{2}:\S{2}).*/';
             preg_match($pattern, $f, $matches);
-            echo '<pre>';
-            var_dump($matches);
-            echo '</pre>';
-            die();
             $show[] = array(
                 'title' => '2009-09-18 del 1',
                 'url' => 'http://p3popular.sipola.se/p3Populär-2009-09-18-1.mp3',
@@ -150,11 +143,8 @@ class Model
                 'url' => "http://{$this->serverName}/" . self::$fileWebPath . "$file",
                 'length' => $size,
                 'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
-            // 'pubDate' => date_create("@$mtime")->format(DATE_RSS)
                         );
-            // print_r($show);die();
         }
-        // print_r($dir);
         
         $this->show = $show;
         return;
@@ -166,16 +156,9 @@ class Model
         
         ini_set('user_agent', 'Void/2.5');
         
-        // list
-        // $url = 'http://api.sr.se/api/rssfeed/rssfeed.aspx?lyssnaigenfeed=2071'; //old url
-        // broadcast. original byut short desc
-        // $url = 'http://sverigesradio.se/api/rss/broadcast/2071';
         
         // pod sommar more desc
         $url = 'http://api.sr.se/api/rss/pod/4023';
-        
-        // program little more desc. atom format
-        // $url = 'http://api.sr.se/api/rss/program/2071';
         
         if ($debug && isset($_SESSION['parse_str'])) { // DEBUG
             $str = $_SESSION['parse_str'];
@@ -190,16 +173,9 @@ class Model
             $str = curl_exec($curl);
             curl_close($curl);
             $_SESSION['parse_str'] = $str;
-            // echo '<pre>';
-            // echo htmlentities($str);
-            // echo $str;
-            // echo '</pre>';
-            // die();
         }
         
         $return = array();
-        
-        // echo $str;die();
         
         $xml = new \SimpleXMLElement($str);
         if (! $xml->channel->item) {
@@ -241,8 +217,6 @@ class Model
             $date = $matches[2] . '-' . $matches[3] . '-' . $matches[4];
             
             // add whitespace in desc
-            // $desc = 'blöÅr blåÄr'; //for testing
-            // $desc = 'bloAr blaAr'; //for testing
             $desc = self::lcucaddwhitespace($desc);
             $desc = self::lcucaddwhitespace($desc);
             $title .= ' ' . $date;
@@ -250,7 +224,6 @@ class Model
                 'title' => $title,
                 'desc' => $desc
             );
-            // var_dump($desc);die();
         }
         
         unset($xml);
@@ -264,7 +237,6 @@ class Model
     public static function lcucaddwhitespace($desc)
     {
         $matches = array();
-        // $pattern = '/(.*?[[:lower:]]{1})([[:upper:]]{1}.*)/'; //åäö nåt working.
         $pattern = '/(.*?[a-z]{1})([A-Z]{1}.*)/'; // åäö not working
         preg_match($pattern, $desc, $matches);
         if (! isset($matches[1])) {
@@ -288,7 +260,6 @@ class Model
             if (! isset($finished[$date])) {
                 $title = $i['title'];
                 echo "./downloadP3Popular.sh $date p #$title<br />";
-                // echo "./downloadP3Popular.sh $date q #$title<br />"; //not many parts anymore
             }
         }
     }

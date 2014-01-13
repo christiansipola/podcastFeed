@@ -1,8 +1,13 @@
 {
-    "require": {
-        "silex/silex": "~1.1"
-    },
-    "autoload": {
-        "psr-4": {"Zippo\\": "src/"}
+  "name" : "zippo/podcast-feed",
+  "license": "MIT",
+  "description" : "download podcast and publish them",
+  "require" : {
+    "silex/silex" : "~1.1"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "Zippo\\" : "src/"
     }
+  }
 }

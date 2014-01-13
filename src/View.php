@@ -2,6 +2,8 @@
 
 namespace Zippo;
 
+use Zippo\Model;
+
 class View
 {
 
@@ -17,8 +19,6 @@ class View
             $model->latestBuild = time();
         }
         $build = date_create('@' . $model->latestBuild)->format(DATE_RSS);
-        // $pub = date_create('now')->format(DATE_RSS);
-        // $pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
         $xml = new \DOMDocument('1.0', 'UTF-8');
         // we want a nice output
         $xml->formatOutput = true;
@@ -38,7 +38,6 @@ class View
         $channel->appendChild($xml->createElement('language', 'sv-se'));
         $channel->appendChild($xml->createElement('copyright', 'Sveriges Radio'));
         $channel->appendChild($xml->createElement('lastBuildDate', $build));
-        // $channel->appendChild( $xml->createElement('pubDate',$pub) );
         
         $channel->appendChild($xml->createElement('itunes:author', 'zippo@sovjet.sipola.se'));
         $channel->appendChild($xml->createElement('itunes:subtitle', 'Ripped podcast'));
@@ -84,8 +83,6 @@ class View
             $model->latestBuild = time();
         }
         $build = date_create('@' . $model->latestBuild)->format(DATE_RSS);
-        // $pub = date_create('now')->format(DATE_RSS);
-        // $pub = date_create('@'.$model->latestBuild)->format(DATE_RSS);
         $xml = new \DOMDocument('1.0', 'UTF-8');
         // we want a nice output
         $xml->formatOutput = true;
@@ -106,7 +103,6 @@ class View
         $channel->appendChild($xml->createElement('language', 'sv-se'));
         $channel->appendChild($xml->createElement('copyright', 'Sveriges Radio'));
         $channel->appendChild($xml->createElement('lastBuildDate', $build));
-        // $channel->appendChild( $xml->createElement('pubDate',$pub) );
         
         $channel->appendChild($xml->createElement('itunes:author', 'zippo@sovjet.sipola.se'));
         $channel->appendChild($xml->createElement('itunes:subtitle', 'Ripped podcast'));
@@ -117,14 +113,6 @@ class View
         $image->appendChild($xml->createElement('link', 'http://sverigesradio.se/sida/default.aspx?programid=2071'));
         $image->appendChild($xml->createElement('url', 'http://sverigesradio.se/diverse/images/srlogo-2011.png'));
         
-        /*
-         * $image = $channel->appendChild( $xml->createElement('itunes:image')); 
-         * $image->setAttribute('href','http://sverigesradio.se/diverse/images/srlogo-2011.png');
-         */
-        
-        // $category = $channel->appendChild( $xml->createElement('itunes:category'));
-        // $category->setAttribute('text','Technology');
-        
         foreach ($show as $key => $s) {
             $item = $channel->appendChild($xml->createElement('item'));
             if (! isset($info[$s['date']])) {
@@ -133,7 +121,6 @@ class View
                     'desc' => $s['date']
                 );
             }
-            // $item->appendChild( $xml->createElement('title',$s['title']) );
             $item->appendChild($xml->createElement('title', $info[$s['date']]['title'] . ' ' . $s['title']));
             $item->appendChild($xml->createElement('link', 'http://sverigesradio.se/sida/default.aspx?programid=2071'));
             $item->appendChild($xml->createElement('guid', $s['url']));
