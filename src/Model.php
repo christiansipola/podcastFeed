@@ -24,6 +24,12 @@ class Model
     public $latestBuild;
 
     public $show;
+    
+    /**
+     * 
+     * @var string
+     */
+    public $showName;
 
     /**
      * $_SERVER["SERVER_NAME"]
@@ -53,19 +59,24 @@ class Model
 
     public function genShowP1Sommar()
     {
-        return $this->getShow('p1sommar');
+        $this->showName = 'p1sommar';
+        $collection = $this->getFileMetaCollection();
+        $this->genShowWithMetaData($collection);
     }
     
     public function genShowP3musikguiden()
     {
-        return $this->getShow('p3popular');
+        $this->showName = 'p3popular';
+        $collection = $this->getFileMetaCollection();
+        $this->genShowWithMetaData($collection);
     }
+    
     /**
-     *
-     * @param string $show
-     *            p1sommar or p3popular or p3musik
+     * 
+     * @param string $showName
+     * @return \ArrayObject
      */
-    private function getShow($showName)
+    private function getFileMetaCollection()
     {
         if (! is_dir(self::$filePathDir)) {
             throw new \Exception('directory ' . self::$filePathDir . ' does not exist');
@@ -73,6 +84,8 @@ class Model
         chdir(self::$filePathDir);
         $dir = scandir(self::$filePathDir);
         $show = array();
+        
+        $collection = new \ArrayObject();
         
         foreach ($dir as $file) {
             $start = substr(strtolower($file), 0, 7);
@@ -96,16 +109,52 @@ class Model
                 continue;
             }
             $mtime = filemtime(self::$filePathDir . '/' . $file);
+            
+            $fileMeta = new FileMeta();
+            $fileMeta->year = $year;
+            $fileMeta->month = $month;
+            $fileMeta->day = $day;
+            $fileMeta->part = $part;
+            $fileMeta->size = $size;
+            $fileMeta->file = $file;
+            
             if ($mtime > $this->latestBuild) {
                 $this->latestBuild = $mtime;
             }
             
-            if ($showName == 'p3popular' && ($part == '1' || $part == '2' || $part == 'm' || $part == 's')) {
+            $collection->append($fileMeta);
+            
+        }
+        return $collection;
+        
+    }
+    
+    /**
+     * 
+     * @param \ArrayObject $metadataCollection
+     * @param string $showName
+     * @throws \Exception
+     */
+    public function genShowWithMetaData(\ArrayObject $metadataCollection)
+    {
+        $show = array();
+        
+        /* @var $fileMeta FileMeta */
+        foreach ($metadataCollection as $fileMeta) {
+            
+             $year = $fileMeta->year;
+             $month = $fileMeta->month;
+             $day = $fileMeta->day;
+             $part = $fileMeta->part;
+             $size = $fileMeta->size;
+             $file = $fileMeta->file;
+            
+            if ($this->showName == 'p3popular' && ($part == '1' || $part == '2' || $part == 'm' || $part == 's')) {
                 $title = "$year-$month-$day del $part ";
-            } elseif ($showName == 'p1sommar' && ($part == 'p')) {
+            } elseif ($this->showName == 'p1sommar' && ($part == 'p')) {
                 // $title = "del 1"; //not many parts anymore
                 $title = "";
-            } elseif ($showName == 'p1sommar' && ($part == 'q')) {
+            } elseif ($this->showName == 'p1sommar' && ($part == 'q')) {
                 $title = "del 2";
             } else {
                 continue;
@@ -209,7 +258,7 @@ class Model
         foreach ($xml->channel->item as $i) {
             $title = (string) $i->title; // Karin Adelsköld
             $matches = array();
-            $pattern = '/(.*?)sommar_i_p1_(.{4})(.{2})(.{2}).*/'; // todo fix for winter
+            $pattern = '/(.*?)sommar_i_p1_(.{4})(.{2})(.{2}).*/'; //@todo fix for winter
             $desc = (string) $i->description;
             
             preg_match($pattern, $i->guid, $matches);
