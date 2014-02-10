@@ -99,7 +99,8 @@ elif [ $PART == "2" ]; then
 	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="200600"
+	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
+	START="193000"
 elif [ $PART = "s" ]; then
 	ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
