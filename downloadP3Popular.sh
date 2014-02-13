@@ -92,7 +92,7 @@ BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="180300"
+	START="190300"
 elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	START="183000"
@@ -100,6 +100,9 @@ elif [ $PART == "2" ]; then
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
+	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
+	BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
+	BASE_IS_STREAM=1
 	START="193000"
 elif [ $PART = "s" ]; then
 	ARTIST="Luuk & Locko"
@@ -146,7 +149,7 @@ fi
 echo "starting to download and convert..."
 date
 
-LIST00="1800 3600 5400 7200 9000 10800 12600"
+LIST00="5400 7200 9000 10800 12600 3600 1800"
 LIST0030="5220"
 LIST03="3420 5220 7020  8820"
 LIST06="1440 3240"
