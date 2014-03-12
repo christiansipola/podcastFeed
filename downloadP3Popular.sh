@@ -100,8 +100,12 @@ elif [ $PART == "2" ]; then
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
-	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
 	BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
+	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/02/srp3_2014-02-25_193000_1800_a192.m4a"
+	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-04_193000_1800_a192.m4a"
+	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-11_193000_1800_a192.m4a"
+	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-18_193000_1800_a192.m4a"
+    BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-25_193000_1800_a192.m4a"
 	BASE_IS_STREAM=1
 	START="193000"
 elif [ $PART = "s" ]; then
