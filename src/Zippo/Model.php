@@ -2,17 +2,12 @@
 
 namespace Zippo;
 
-use Zippo\FileMeta;
-
 class Model
 {
     
-    // on localhost
-    const DIR = '/srv/unofficial/podcastFeed/radio';
-
     const DIR_LOCAL = '/srv/unofficial/podcastFeed/radio';
     // on web
-    const DIR_WEB = '/home/ftp/Radio/p3popular';
+    const DIR_WEB = '/tmp/podcast';
     const MINSIZE = '32000000'; // 20:30
     
     const SHOW_P1SOMMAR = 'p1sommar';
