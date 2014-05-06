@@ -39,6 +39,8 @@ function transfer {
 
 }
 
+#Darwin or Linux
+SYSTEM=`uname`
 
 #move arg to array
 INDEX=1;
@@ -63,7 +65,14 @@ if [ ${#args[$INDEX]} -gt 1 ]; then
   let "INDEX+=1";
 else
   #yesterday as default (=minus 1 day)
-  DATE=`date -v-1d +%Y-%m-%d` 
+  if [ ${SYSTEM} = "Linux" ]; then
+    DATE=`date -d"yesterday" +%Y-%m-%d` ##linux
+  elif [ ${SYSTEM} = "Darwin" ]; then
+    DATE=`date -v-1d +%Y-%m-%d` ##OS X
+   else
+      echo "Can not handle system ${SYSTEM}"
+      exit 1
+   fi
 fi
 
 if [ ${#args[$INDEX]} -eq 1 ]; then
