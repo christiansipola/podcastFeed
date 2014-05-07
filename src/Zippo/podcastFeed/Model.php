@@ -228,7 +228,7 @@ class Model
         foreach ($xml->channel->item as $i) {
             $title = (string) $i->title; // Karin Adelsköld
             $matches = array();
-            $pattern = '/(.*?)sommar_i_p1_(.{4})(.{2})(.{2}).*/'; //@todo fix for winter
+            $pattern = '/(.*?)[sommar[vinter]_i_p1_(.{4})(.{2})(.{2}).*/';
             $desc = (string) $i->description;
             
             preg_match($pattern, $i->guid, $matches);
