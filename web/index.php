@@ -33,5 +33,13 @@ $app->get('/p1sommar', function () {
     $response->headers->set('Content-Type','application/xml');
     return $response;
 });
+
+$app->get('/files/{file}', function ($file) use ($app) {
+    $c = new Controller();
+    if (!file_exists($c->configuration->fullLocalPathToFiles . $file)) {
+        $app->abort(404);
+    }
+    return $app->sendFile($c->configuration->fullLocalPathToFiles . $file);
+});
     
 $app->run();

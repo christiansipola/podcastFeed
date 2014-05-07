@@ -5,20 +5,30 @@ namespace Zippo;
 class Controller
 {
 
+    /**
+     * @var Configuration
+     */
+    public $configuration;
+    
     public function __construct()
     {
         setlocale(LC_TIME, "sv_SE.UTF-8", "sv_SE");
+        $this->configuration = new Configuration();
+        $this->configuration->fullLocalPathToFiles = '/tmp/';
+        
         if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == 'htdocs.local') {
-            Model::$filePathDir = Model::DIR_LOCAL;
+            $this->configuration->minsize = 0;
+            $this->configuration->urlPath = 'podcastFeed/';
         } else {
-            Model::$filePathDir = Model::DIR_WEB;
-            Model::$fileWebPath = '';
+            $this->configuration->minsize = 32000000;
+            $this->configuration->urlPath = '';
         }
     }
     
     public function musikguiden()
     {
         $m = new Model();
+        $m->configuration = $this->configuration;
         $m->serverName = $_SERVER['SERVER_NAME'];
         $v = new View();
         $m->genShowP3musikguiden();
@@ -28,6 +38,7 @@ class Controller
     public function sommar()
     {
         $m = new Model();
+        $m->configuration = $this->configuration;
         $m->serverName = $_SERVER['SERVER_NAME'];
         $v = new View();
         $m->genShowP1Sommar();
