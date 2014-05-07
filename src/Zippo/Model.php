@@ -159,7 +159,7 @@ class Model
             $show[] = array(
                 'title' => $title,
                 'date' => "$year-$month-$day",
-                'url' => "http://{$this->serverName}/" . $this->configuration->urlPath . "$file",
+                'url' => "http://{$this->serverName}/" . $this->configuration->urlPath . "files/$file",
                 'length' => $size,
                 'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
                         );
