@@ -1,6 +1,6 @@
 <?php
 
-namespace Zippo;
+namespace Zippo\podcastFeed;
 
 class Model
 {

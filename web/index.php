@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Response;
 
-use Zippo\Controller;
+use Zippo\podcastFeed\Controller;
 
 // web/index.php
 require_once __DIR__.'/../vendor/autoload.php';

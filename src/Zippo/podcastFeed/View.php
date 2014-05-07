@@ -1,8 +1,6 @@
 <?php
 
-namespace Zippo;
-
-use Zippo\Model;
+namespace Zippo\podcastFeed;
 
 class View
 {
@@ -25,7 +23,8 @@ class View
         /*
          * <hrxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:LonXML.xsd">
          */
-        $rssNode = $xml->appendChild($xml->createElement('rss'));
+        $rssNode = $xml->createElement('rss');
+        $xml->appendChild($rssNode);
         
         $rssNode->setAttribute('version', '2.0');
         $rssNode->setAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
@@ -47,10 +46,12 @@ class View
         $image->appendChild($xml->createElement('link', 'http://www.sr.se/sida/default.aspx?ProgramId=2785'));
         $image->appendChild($xml->createElement('url', 'http://www.sr.se/diverse/images/sr_14_90_90.jpg'));
         
-        $image = $channel->appendChild($xml->createElement('itunes:image'));
+        $image = $xml->createElement('itunes:image');
+        $channel->appendChild($image);
         $image->setAttribute('href', 'http://www.sr.se/diverse/images/sr_14_300_300.jpg');
         
-        $category = $channel->appendChild($xml->createElement('itunes:category'));
+        $category = $xml->createElement('itunes:category');
+        $channel->appendChild($$category);
         $category->setAttribute('text', 'Technology');
         
         foreach ($show as $s) {
@@ -59,7 +60,8 @@ class View
             $item->appendChild($xml->createElement('link', 'http://sverigesradio.se/p3popular'));
             $item->appendChild($xml->createElement('guid', $s['url']));
             $item->appendChild($xml->createElement('description', 'P3 Populär ' . $s['title']));
-            $enc = $item->appendChild($xml->createElement('enclosure'));
+            $enc = $xml->createElement('enclosure');
+            $item->appendChild($enc);
             $enc->setAttribute('url', $s['url']);
             $enc->setAttribute('length', $s['length']);
             $enc->setAttribute('type', 'audio/mpeg');
@@ -90,7 +92,8 @@ class View
          * <hrxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          * xsi:noNamespaceSchemaLocation="file:LonXML.xsd">
          */
-        $rssNode = $xml->appendChild($xml->createElement('rss'));
+        $rssNode = $xml->createElement('rss');
+        $xml->appendChild($rssNode);
         
         $rssNode->setAttribute('version', '2.0');
         $rssNode->setAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
@@ -113,7 +116,7 @@ class View
         $image->appendChild($xml->createElement('link', 'http://sverigesradio.se/sida/default.aspx?programid=2071'));
         $image->appendChild($xml->createElement('url', 'http://sverigesradio.se/diverse/images/srlogo-2011.png'));
         
-        foreach ($show as $key => $s) {
+        foreach ($show as $s) {
             $item = $channel->appendChild($xml->createElement('item'));
             if (! isset($info[$s['date']])) {
                 $info[$s['date']] = array(
@@ -125,7 +128,8 @@ class View
             $item->appendChild($xml->createElement('link', 'http://sverigesradio.se/sida/default.aspx?programid=2071'));
             $item->appendChild($xml->createElement('guid', $s['url']));
             $item->appendChild($xml->createElement('description', $info[$s['date']]['desc'] . ' ' . $s['title']));
-            $enc = $item->appendChild($xml->createElement('enclosure'));
+            $enc = $xml->createElement('enclosure');
+            $item->appendChild($enc);
             $enc->setAttribute('url', $s['url']);
             $enc->setAttribute('length', $s['length']);
             $enc->setAttribute('type', 'audio/mpeg');

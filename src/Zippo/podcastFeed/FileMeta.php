@@ -1,5 +1,5 @@
 <?php
-namespace Zippo;
+namespace Zippo\podcastFeed;
 
 class FileMeta
 {
