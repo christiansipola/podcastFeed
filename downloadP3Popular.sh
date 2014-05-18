@@ -39,6 +39,9 @@ function transfer {
 
 }
 
+## Download to tmp
+cd /tmp
+
 #Darwin or Linux
 SYSTEM=`uname`
 
