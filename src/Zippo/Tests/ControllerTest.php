@@ -5,7 +5,6 @@ namespace Zippo\podcastFeed\Tests;
 use Silex\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\HttpKernel\Client;
 
 class ControllerTest extends WebTestCase
 {
@@ -19,7 +18,9 @@ class ControllerTest extends WebTestCase
         require __DIR__.'/../../../config/app.php';
         $app['debug'] = true;
         $app['session.test'] = true;
-        $app['exception_handler']->disable();
+        /* @var $exceptionHandler \Silex\ExceptionHandler */
+        $exceptionHandler = $app['exception_handler'];
+        $exceptionHandler->disable();
         
         return $app;
     }
