@@ -27,22 +27,22 @@ class Controller
     
     public function musikguiden()
     {
-        $m = new Model();
-        $m->configuration = $this->configuration;
-        $m->serverName = $_SERVER['SERVER_NAME'];
-        $v = new View();
-        $m->genShowP3musikguiden();
-        return $v->render($m);
+        $model = new Model();
+        $model->configuration = $this->configuration;
+        $model->serverName = $_SERVER['SERVER_NAME'];
+        $view = new View();
+        $model->genShowP3musikguiden();
+        return $view->render($model);
     }
     
     public function sommar()
     {
-        $m = new Model();
-        $m->configuration = $this->configuration;
-        $m->serverName = $_SERVER['SERVER_NAME'];
-        $v = new View();
-        $m->genShowP1Sommar();
+        $model = new Model();
+        $model->configuration = $this->configuration;
+        $model->serverName = $_SERVER['SERVER_NAME'];
+        $view = new View();
+        $model->genShowP1Sommar();
         $info = Model::getInfoP1Sommar();
-        return $v->renderP1Sommar($m, $info);
+        return $view->renderP1Sommar($model, $info);
     }
 }

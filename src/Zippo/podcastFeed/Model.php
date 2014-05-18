@@ -43,9 +43,8 @@ class Model
     }
     
     /**
-     * 
-     * @param string $showName
      * @return \ArrayObject
+     * @throws \Exception
      */
     private function getFileMetaCollection()
     {
@@ -102,7 +101,6 @@ class Model
     /**
      * 
      * @param \ArrayObject $metadataCollection
-     * @param string $showName
      * @throws \Exception
      */
     public function genShowWithMetaData(\ArrayObject $metadataCollection)

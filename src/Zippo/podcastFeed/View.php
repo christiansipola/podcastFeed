@@ -33,12 +33,12 @@ class View
         
         $channel->appendChild($xml->createElement('title', 'P3 Populär'));
         $channel->appendChild($xml->createElement('description', 'P3 Populär podcast'));
-        $channel->appendChild($xml->createElement('link', "http://{$model->serverName}/podcastFeed/"));
+        $channel->appendChild($xml->createElement('link', "http://{$model->serverName}"));
         $channel->appendChild($xml->createElement('language', 'sv-se'));
         $channel->appendChild($xml->createElement('copyright', 'Sveriges Radio'));
         $channel->appendChild($xml->createElement('lastBuildDate', $build));
         
-        $channel->appendChild($xml->createElement('itunes:author', 'zippo@sovjet.sipola.se'));
+        $channel->appendChild($xml->createElement('itunes:author', 'c@sipola.se'));
         $channel->appendChild($xml->createElement('itunes:subtitle', 'Ripped podcast'));
         $channel->appendChild($xml->createElement('itunes:explicit', 'no'));
         $image = $channel->appendChild($xml->createElement('itunes:image'));

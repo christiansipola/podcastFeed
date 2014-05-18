@@ -3,7 +3,8 @@
 namespace Zippo\podcastFeed;
 
 
-class Configuration {
+class Configuration
+{
 
     public $minsize;
 
@@ -18,5 +19,4 @@ class Configuration {
      * @var string
      */
     public $urlPath;
-
-} 
+}
