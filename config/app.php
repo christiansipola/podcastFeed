@@ -4,6 +4,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Zippo\podcastFeed\Controller;
 
+$app = new Silex\Application();
+// definitions
+$app['debug'] = true;
+
+date_default_timezone_set('Europe/Stockholm');
+
 $app->get('/', function () {
         $c = new Controller();
         $output = $c->musikguiden();
