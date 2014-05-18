@@ -51,7 +51,7 @@ class View
         $image->setAttribute('href', 'http://www.sr.se/diverse/images/sr_14_300_300.jpg');
         
         $category = $xml->createElement('itunes:category');
-        $channel->appendChild($$category);
+        $channel->appendChild($category);
         $category->setAttribute('text', 'Technology');
         
         foreach ($show as $s) {
