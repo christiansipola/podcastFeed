@@ -7,7 +7,7 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
-    "phpunit/phpunit": "4.*",
+    "phpunit/phpunit": "3.*",
     "symfony/browser-kit": "*"
   },
   "autoload" : {
