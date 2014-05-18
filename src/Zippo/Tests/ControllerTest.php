@@ -3,6 +3,7 @@
 namespace Zippo\podcastFeed\Tests;
 
 use Silex\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\Client;
 
@@ -36,7 +37,8 @@ class ControllerTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/p3popular');
         $this->assertTrue($client->getResponse()->isOk());
-        $this->assertEquals($crawler->getNode(0)->nodeName, 'rss');
+        $this->assertXpathExist($crawler, 'rss/channel/description');
+        $this->assertXpathHasText($crawler, 'rss/channel/title', 'P3 Populär');
     }
 
     public function testSommar()
@@ -44,6 +46,20 @@ class ControllerTest extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/p1sommar');
         $this->assertTrue($client->getResponse()->isOk());
-        $this->assertEquals($crawler->getNode(0)->nodeName, 'rss');
+        $this->assertXpathExist($crawler, 'rss/channel/description');
+        $this->assertXpathHasText($crawler, 'rss/channel/title', 'Sommar i P1');
+    }
+
+    private function assertXpathExist(Crawler $crawler, $xpath)
+    {
+        $node = $crawler->filterXPath($xpath)->getNode(0);
+        $this->assertTrue(!empty($node->nodeName), $xpath);
+    }
+
+    private function assertXpathHasText(Crawler $crawler, $xpath, $expectedText)
+    {
+        $node = $crawler->filterXPath($xpath)->getNode(0);
+        $this->assertTrue(!empty($node->nodeName), $xpath);
+        $this->assertEquals($expectedText, $node->textContent);
     }
 }
