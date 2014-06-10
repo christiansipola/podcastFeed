@@ -3,11 +3,11 @@
   "license": "MIT",
   "description" : "download podcast and publish them",
   "require" : {
-    "silex/silex" : "~1.1"
+    "silex/silex" : "*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
-    "phpunit/phpunit": "3.*",
+    "phpunit/phpunit": "*",
     "symfony/browser-kit": "*"
   },
   "autoload" : {
