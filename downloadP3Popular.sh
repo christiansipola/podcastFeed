@@ -107,7 +107,8 @@ if [ $PART == "1" ]; then
 	START="190300"
 elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="183000"
+	#START="183000"
+	START="173000" ##summer
 	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
