@@ -104,11 +104,10 @@ BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	START="190300"
+	STARTLIST="190300"
 elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	#START="183000"
-	START="173000" ##summer
+	STARTLIST="173000 183000" ##17:30 summer
 	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
@@ -123,13 +122,13 @@ elif [ $PART = "m" ]; then
     BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/04/srp3_2014-04-08_193000_1800_a192.m4a"
     BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/04/srp3_2014-04-15_193000_1800_a192.m4a"
 	BASE_IS_STREAM=1
-	START="193000"
+	STARTLIST="193000"
 elif [ $PART = "s" ]; then
 	ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
-	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
-	START="130000"
+	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
+	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
+	STARTLIST="130000"
 elif [ $PART = "q" ]; then
 	echo "nothing to do. exit"
 	exit 1
@@ -169,40 +168,43 @@ fi
 echo "starting to download and convert..."
 date
 
-LIST00="5400 7200 9000 10800 12600 3600 1800"
+LIST00="5400 7200 9000 10800 12600 3600 1800 1740"
 LIST0030="5220"
-LIST03="3420 5220 7020  8820"
+LIST03="3420 5220 7020 8820 1620"
 LIST06="1440 3240"
 LIST="5520"
-STARTMINUTE=${START:2:4}
-if [ $STARTMINUTE == "0000" ]; then
-	LIST=$LIST00
-elif [ $STARTMINUTE == "0030" ]; then
-	LIST=$LIST0030
-elif [ $STARTMINUTE == "0300" ]; then
-	LIST=$LIST03
-elif [ $STARTMINUTE == "0600" ]; then
-  LIST=$LIST06
-elif [ $STARTMINUTE == "3000" ]; then
-  LIST=$LIST00
-fi
 
-
-for LENGTH in $LIST 
+for START in ${STARTLIST}
 do
-	echo "trying length ${LENGTH}"
-	STREAM="${BASE}${DATE}_${START}_${LENGTH}_a192.m4a"
-	if [ $BASE_IS_STREAM == 1 ]; then
-	  STREAM=$BASE
-	fi
-	curl -f -v $STREAM -o $PIPE
-	if [ $? != "22" ]; then
-		break
-	else
-		echo "$LENGTH failed."
-	fi
+    STARTMINUTE=${START:2:4}
+    if [ $STARTMINUTE == "0000" ]; then
+        LIST=$LIST00
+    elif [ $STARTMINUTE == "0030" ]; then
+        LIST=$LIST0030
+    elif [ $STARTMINUTE == "0300" ]; then
+        LIST=$LIST03
+    elif [ $STARTMINUTE == "0600" ]; then
+      LIST=$LIST06
+    elif [ $STARTMINUTE == "3000" ]; then
+      LIST=$LIST00
+    fi
+
+
+    for LENGTH in ${LIST}
+    do
+        echo "trying length ${LENGTH}"
+        STREAM="${BASE}${DATE}_${START}_${LENGTH}_a192.m4a"
+        if [ $BASE_IS_STREAM == 1 ]; then
+          STREAM=$BASE
+        fi
+        curl -f -v $STREAM -o $PIPE
+        if [ $? != "22" ]; then
+            break
+        else
+            echo "$LENGTH failed."
+        fi
+    done
 done
-	
 
 if [ $? == "22" ]; then
  echo "could not find show. exiting."
