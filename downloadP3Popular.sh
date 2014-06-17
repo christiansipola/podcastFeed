@@ -98,7 +98,7 @@ MONTH=${DATE:5:2}
 DAY=${DATE:8:2}
 
 #%u day of week (1..7); 1 is Monday, j does not change date
-WEEKDAY=`date -j -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
+WEEKDAY=`date -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
 #WEEKDAY=5
 BASE_IS_STREAM=0
 
@@ -113,14 +113,6 @@ elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
 	BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
-	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/02/srp3_2014-02-25_193000_1800_a192.m4a"
-	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-04_193000_1800_a192.m4a"
-	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-11_193000_1800_a192.m4a"
-	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-18_193000_1800_a192.m4a"
-    BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/03/srp3_2014-03-25_193000_1800_a192.m4a"
-    BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/04/srp3_2014-04-01_193000_1800_a192.m4a"
-    BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/04/srp3_2014-04-08_193000_1800_a192.m4a"
-    BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/2014/04/srp3_2014-04-15_193000_1800_a192.m4a"
 	BASE_IS_STREAM=1
 	STARTLIST="193000"
 elif [ $PART = "s" ]; then
@@ -137,7 +129,6 @@ else
 	exit 1
 fi
 
-cd ~/git/unofficial/podcastFeed/radio
 if [ -a "$FILE.$SUFFIX" ] ; then
 	if [ "$FORCE" == "true" ] ; then
 		echo "file $FILE.$SUFFIX already exist but it wil be overwritten!"
@@ -168,6 +159,7 @@ fi
 echo "starting to download and convert..."
 date
 
+## 1740 = (30 - 1) * 60
 LIST00="5400 7200 9000 10800 12600 3600 1800 1740"
 LIST0030="5220"
 LIST03="3420 5220 7020 8820 1620"
