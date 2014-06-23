@@ -51,7 +51,19 @@ if [ $# != 0 ]; then
 fi
 
 if [ ${#args[$INDEX]} -gt 1 ]; then
-  DATE=${args[$INDEX]} 
+  DATE=${args[$INDEX]}
+  if [ ${DATE} = "today" ]; then
+    if [ ${SYSTEM} = "Linux" ]; then
+        DATE=`date -d"today" +%Y-%m-%d` ##linux
+    elif [ ${SYSTEM} = "Darwin" ]; then
+        DATE=`date +%Y-%m-%d` ##OS X
+    else
+      echo "Can not handle system ${SYSTEM}"
+      exit 1
+    fi
+    echo ${DATE}
+    exit 0
+  fi
   let "INDEX+=1";
 else
   #yesterday as default (=minus 1 day)
