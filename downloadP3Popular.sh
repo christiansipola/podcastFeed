@@ -182,7 +182,7 @@ do
         if [ $BASE_IS_STREAM == 1 ]; then
           STREAM=$BASE
         fi
-        curl -f -v $STREAM -o $PIPE
+        nice -n19 curl -f -v $STREAM -o $PIPE
         if [ $? != "22" ]; then
             break
         else
@@ -198,7 +198,7 @@ fi
 
 ## convert ##
 
-ffmpeg -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
+nice -n19 ffmpeg -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
 
 date
 
