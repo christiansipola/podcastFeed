@@ -26,19 +26,6 @@
 #      REVISION:  ---
 #===============================================================================
 
-function transfer {
-
-	REMOTE="/home/podcast/podcast/$FILE.$SUFFIX"
-	if ssh podcast@vps.kaustik.com 'ls "'$REMOTE'" > /dev/null  2>/dev/null ' ; then
-		echo "exist on vps"
-	else
-		echo "copy to vps"
-		scp $FILE.$SUFFIX podcast@vps.kaustik.com:.
-	fi
-	
-
-}
-
 ## Download to tmp
 cd /tmp
 
@@ -134,10 +121,6 @@ if [ -a "$FILE.$SUFFIX" ] ; then
 		echo "file $FILE.$SUFFIX already exist but it wil be overwritten!"
 	else	
 		echo "file $FILE.$SUFFIX already exist. Use -f to force overwrite."
-		#user regular brackets here beacuse bash is wierd
-		if (( $PART == "p" || $PART=="q" )); then
-        		transfer
-		fi
 		exit 1
 	fi
 fi
@@ -214,11 +197,6 @@ date
 
 ## remove pipe ##
 rm -f $PIPE
-
-#user regular brackets here beacuse bash is wierd
-if (( $PART == "p" || $PART=="q" )); then
-        transfer
-fi
 
 echo "finished"
 exit 0
