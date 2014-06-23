@@ -61,8 +61,6 @@ if [ ${#args[$INDEX]} -gt 1 ]; then
       echo "Can not handle system ${SYSTEM}"
       exit 1
     fi
-    echo ${DATE}
-    exit 0
   fi
   let "INDEX+=1";
 else
