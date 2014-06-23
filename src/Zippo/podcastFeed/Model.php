@@ -191,8 +191,8 @@ class Model
         $info = $cache->getP1Cache();
         if (empty($info)) {
             $info = self::downloadInfoP1SommarVinter();
+            $cache->writeToCache($info);
         }
-        $cache->writeToCache($info);
         return $info;
     }
 
