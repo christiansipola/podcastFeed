@@ -19,11 +19,11 @@ class Cache
      */
     public function getP1Cache()
     {
-        //if cache is before 04:00 this day, renew!
+        //if cache is before 16:00 this day, renew! (we think sr updates xml
         if (file_exists($this->tmpFileTime)) {
             $time = file_get_contents($this->tmpFileTime);
             $todayBreak = new \DateTime();
-            $todayBreak->setTime(4, 0);
+            $todayBreak->setTime(16, 0);
             $cacheDate = new \DateTime();
             $cacheDate->setTimestamp($time);
             if ($cacheDate > $todayBreak) {
