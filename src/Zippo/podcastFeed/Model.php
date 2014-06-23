@@ -172,28 +172,34 @@ class Model
      */
     private static function getXmlForSommar()
     {
-        $debug = false;
-        
         // pod sommar more desc
         $url = 'http://api.sr.se/api/rss/pod/4023';
-        
-        if ($debug && isset($_SESSION['parse_str'])) { // DEBUG
-            $str = $_SESSION['parse_str'];
-        } else {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-            $str = curl_exec($curl);
-            curl_close($curl);
-            $_SESSION['parse_str'] = $str;
-        }
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+        $str = curl_exec($curl);
+        curl_close($curl);
         $xml = new \SimpleXMLElement($str);
         return $xml;
     }
     
     public static function getInfoP1Sommar()
+    {
+        $cache = new Cache();
+        $info = $cache->getP1Cache();
+        if (empty($info)) {
+            $info = self::downloadInfoP1SommarVinter();
+        }
+        $cache->writeToCache($info);
+        return $info;
+    }
+
+    /**
+     * @return array
+     */
+    private static function downloadInfoP1SommarVinter()
     {
         $xml = self::getXmlForSommar();
         
