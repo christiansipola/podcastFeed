@@ -101,15 +101,16 @@ BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	STARTLIST="190300"
+	STARTLIST="190300 203000" #20:30, 3600 fahl
 elif [ $PART == "2" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	STARTLIST="173000 183000 203000" ##17:30 summer, #20:30, 3600 fahl
+	STARTLIST="173000 183000" ##17:30 summer
 	#BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
 	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
 	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
 	BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
+	http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3/2014/08/srp3_2014-08-18_203000_3600_a96.m4a
 	BASE_IS_STREAM=1
 	STARTLIST="193000"
 elif [ $PART = "s" ]; then
