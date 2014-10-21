@@ -29,17 +29,29 @@ class Controller
     {
         $model = new Model();
         $model->configuration = $this->configuration;
-        $model->serverName = $_SERVER['SERVER_NAME'];
+        $model->serverName = $this->genServername(); 
         $view = new View();
         $model->genShowP3musikguiden();
         return $view->render($model);
+    }
+
+    /**
+     * @return string
+     */
+    private function genServername(){
+        if (isset($_SERVER['SERVER_NAME'])) {
+            $serverName = $_SERVER['SERVER_NAME'];
+        } else {
+            $serverName = 'dummy';
+        }
+        return $serverName;
     }
     
     public function sommar()
     {
         $model = new Model();
         $model->configuration = $this->configuration;
-        $model->serverName = $_SERVER['SERVER_NAME'];
+        $model->serverName = $this->genServername();
         $view = new View();
         $model->genShowP1Sommar();
         $info = Model::getInfoP1Sommar();

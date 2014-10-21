@@ -70,6 +70,6 @@ class Cache
     {
         //save cache
         file_put_contents($this->tmpFile, serialize($info));
-        file_put_contents($this->tmpFileTime, mktime());
+        file_put_contents($this->tmpFileTime, time());
     }
 }
