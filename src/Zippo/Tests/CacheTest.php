@@ -19,10 +19,18 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->cache->writeToCache(array());
     }
 
+    public function testNowBeforeTodaysBreak()
+    {
+        $expectedBreak = new \DateTime('2014-10-10 16:00');
+        $this->cache->genPeriodfromNowBreakFrom(new \DateTime('2014-10-11 15:00'));
+        $actualBreak = $this->cache->getBreak();
+        $this->assertEquals($expectedBreak, $actualBreak);
+    }
+    
     public function testCache()
     {
         $expectedInfo = [
-            '2014-06-22' => [
+            '2014-10-21' => [
                 'desc' => 'test'
             ]
         ];
