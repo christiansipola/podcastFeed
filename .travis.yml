@@ -8,4 +8,9 @@ before_script:
   - sudo dpkg-reconfigure --frontend noninteractive tzdata
   - composer install --dev
 
-script: vendor/bin/phpunit src/
+script:
+  - mkdir -p build/logs
+  - phpunit --coverage-clover build/logs/clover.xml src/
+
+after_script:
+ - vendor/bin/coveralls -v
