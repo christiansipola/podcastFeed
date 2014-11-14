@@ -59,42 +59,11 @@ class Model
         
         $collection = new \ArrayObject();
         
-        foreach ($dir as $file) {
-            $start = substr(strtolower($file), 0, 7);
-            if ($start != 'podcast') {
-                continue;
+        foreach ($dir as $filename) {
+            $fileMeta = $this->getFileMetaFromFilename($filename);
+            if ($fileMeta instanceof FileMeta) {
+                $collection->append($fileMeta);
             }
-            $size = filesize($this->configuration->fullLocalPathToFiles . $file);
-            $tmp = explode("-", $file);
-            if (count($tmp) < 4) {
-                continue;
-            }
-            $part = substr($tmp[4], 0, 1);
-            $year = $tmp[1];
-            $month = $tmp[2];
-            $day = $tmp[3];
-            if ($part == 'q' && $size < ($this->configuration->minsize / 2)) {
-                continue; // second part of podcast is only 30 min
-            }
-            
-            if ($part != 'q' && $size < $this->configuration->minsize) {
-                continue;
-            }
-            $mtime = filemtime($this->configuration->fullLocalPathToFiles . $file);
-            
-            $fileMeta = new FileMeta();
-            $fileMeta->year = $year;
-            $fileMeta->month = $month;
-            $fileMeta->day = $day;
-            $fileMeta->part = $part;
-            $fileMeta->size = $size;
-            $fileMeta->file = $file;
-            
-            if ($mtime > $this->latestBuild) {
-                $this->latestBuild = $mtime;
-            }
-            
-            $collection->append($fileMeta);
             
         }
         return $collection;
@@ -298,5 +267,47 @@ class Model
                 echo "./downloadP3Popular.sh $date p #$title<br />";
             }
         }
+    }
+
+    /**
+     * @param string $filename
+     * @return FileMeta
+     */
+    private function getFileMetaFromFilename($filename)
+    {
+        $start = substr(strtolower($filename), 0, 7);
+        if ($start != 'podcast') {
+            return null;
+        }
+        $size = filesize($this->configuration->fullLocalPathToFiles . $filename);
+        $tmp = explode("-", $filename);
+        if (count($tmp) < 4) {
+            return null;
+        }
+        $part = substr($tmp[4], 0, 1);
+        $year = $tmp[1];
+        $month = $tmp[2];
+        $day = $tmp[3];
+        if ($part == 'q' && $size < ($this->configuration->minsize / 2)) {
+            return null; // second part of podcast is only 30 min
+        }
+
+        if ($part != 'q' && $size < $this->configuration->minsize) {
+            return null;
+        }
+        $mtime = filemtime($this->configuration->fullLocalPathToFiles . $filename);
+
+        $fileMeta = new FileMeta();
+        $fileMeta->year = $year;
+        $fileMeta->month = $month;
+        $fileMeta->day = $day;
+        $fileMeta->part = $part;
+        $fileMeta->size = $size;
+        $fileMeta->file = $filename;
+
+        if ($mtime > $this->latestBuild) {
+            $this->latestBuild = $mtime;
+        }
+        return $fileMeta;
     }
 }
