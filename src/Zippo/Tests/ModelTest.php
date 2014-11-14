@@ -24,7 +24,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase
     {
         $model = new Model();
         $model->configuration = new Configuration();
-        $model->configuration->fullLocalPathToFiles = __DIR__ .'/../../../radio/';
+        $model->configuration->fullLocalPathToFiles = __DIR__ .'/../../../testdata/';
         $model->genShowP3musikguiden();
 
         $this->assertTrue(count($model->show) == 1);
