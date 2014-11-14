@@ -18,7 +18,15 @@ class Model
     /**
      * @var Show[]
      */
-    public $show;
+    private $show;
+
+    /**
+     * @return Show[]
+     */
+    public function getShowList()
+    {
+        return $this->show;
+    }
     
     /**
      * 
@@ -252,21 +260,29 @@ class Model
         return $desc;
     }
 
+    /**
+     * @param array $info
+     * @return string
+     */
     public function getDownloadCodeSommar($info)
     {
         $finished = array();
-        foreach ($this->show as $s) {
+        $showList = $this->getShowList();
+        foreach ($showList as $s) {
             if (isset($info[$s->getDate()])) {
                 $finished[$s->getDate()] = true;
             }
         }
         
+        $string = '';
         foreach ($info as $date => $i) {
             if (! isset($finished[$date])) {
                 $title = $i['title'];
-                echo "./downloadP3Popular.sh $date p #$title<br />";
+                $string .= "./downloadP3Popular.sh $date p #$title<br />";
             }
         }
+        
+        return $string;
     }
 
     /**

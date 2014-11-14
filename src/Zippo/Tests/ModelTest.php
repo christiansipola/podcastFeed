@@ -7,10 +7,23 @@ use Zippo\podcastFeed\Model;
 
 class ModelTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Model
+     */
+    private $model;
+
+
+    public function setUp()
+    {
+        $this->model = new Model();
+        $this->model->configuration = new Configuration();
+        $this->model->configuration->fullLocalPathToFiles = __DIR__ .'/../../../testdata/';
+    }
+    
     public function testSommar()
     {
-        $model = new Model();
-        $info = $model->getInfoP1Sommar();
+        
+        $info = $this->model->getInfoP1Sommar();
 
         $this->assertTrue(count($info) > 0);
         foreach ($info as $dateStr => $row) {
@@ -18,19 +31,23 @@ class ModelTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(isset($row['title']));
             $this->assertTrue(isset($row['desc']));
         }
+        $this->model->genShowP1Sommar();
+        $string = $this->model->getDownloadCodeSommar($info);
+        $this->assertTrue(strlen($string) > 0);
     }
 
     public function testPopular()
     {
-        $model = new Model();
-        $model->configuration = new Configuration();
-        $model->configuration->fullLocalPathToFiles = __DIR__ .'/../../../testdata/';
-        $model->genShowP3musikguiden();
+        $this->model->genShowP3musikguiden();
 
-        $this->assertTrue(count($model->show) == 1);
+        $this->assertEquals(4, count($this->model->getShowList()));
         
-        $show = $model->show[0];
+        $show = $this->model->getShowList()[0];
         
-        $this->assertEquals('2014-05-28', $show->getDate());
+        $this->assertEquals('2014-05-28 del 1 Onsdag', $show->getTitle());
+        $show->getLength();
+        $show->getPubDate();
+        $show->getUrl();
+        $show->getDate();
     }
 }

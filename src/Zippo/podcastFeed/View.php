@@ -12,7 +12,7 @@ class View
      */
     public function render(Model $model)
     {
-        $show = $model->show;
+        $show = $model->getShowList();
         if (empty($model->latestBuild)) {
             $model->latestBuild = time();
         }
@@ -80,7 +80,7 @@ class View
      */
     public function renderP1Sommar(Model $model, $info)
     {
-        $show = $model->show;
+        $show = $model->getShowList();
         if (empty($model->latestBuild)) {
             $model->latestBuild = time();
         }
