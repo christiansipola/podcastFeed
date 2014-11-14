@@ -42,7 +42,8 @@ class ControllerTest extends WebTestCase
         $this->assertMusikguiden($client, $crawler);
     }
 
-    private function assertMusikguiden(Client $client, Crawler $crawler){
+    private function assertMusikguiden(Client $client, Crawler $crawler)
+    {
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertEquals($crawler->getNode(0)->nodeName, 'rss');
         $this->assertXpathExist($crawler, 'rss/channel/description');

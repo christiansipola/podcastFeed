@@ -123,7 +123,8 @@ class Model
      * @return Show
      * @throws \Exception
      */
-    private function getShowFromFileMeta(FileMeta $fileMeta){
+    private function getShowFromFileMeta(FileMeta $fileMeta)
+    {
         
         $year = $fileMeta->year;
         $month = $fileMeta->month;

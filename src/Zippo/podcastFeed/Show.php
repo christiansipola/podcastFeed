@@ -73,7 +73,7 @@ class Show
      * @param string $length
      * @param string $pubDate
      */
-    function __construct($title, $date, $url, $length, $pubDate)
+    public function __construct($title, $date, $url, $length, $pubDate)
     {
         $this->title = $title;
         $this->date = $date;
@@ -81,4 +81,4 @@ class Show
         $this->length = $length;
         $this->pubDate = $pubDate;
     }
-} 
+}
