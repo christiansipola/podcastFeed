@@ -56,17 +56,17 @@ class View
         
         foreach ($show as $s) {
             $item = $channel->appendChild($xml->createElement('item'));
-            $item->appendChild($xml->createElement('title', $s['title']));
+            $item->appendChild($xml->createElement('title', $s->getTitle()));
             $item->appendChild($xml->createElement('link', 'http://sverigesradio.se/p3popular'));
-            $item->appendChild($xml->createElement('guid', $s['url']));
-            $item->appendChild($xml->createElement('description', 'P3 Populär ' . $s['title']));
+            $item->appendChild($xml->createElement('guid', $s->getUrl()));
+            $item->appendChild($xml->createElement('description', 'P3 Populär ' . $s->getTitle()));
             $enc = $xml->createElement('enclosure');
             $item->appendChild($enc);
-            $enc->setAttribute('url', $s['url']);
-            $enc->setAttribute('length', $s['length']);
+            $enc->setAttribute('url', $s->getUrl());
+            $enc->setAttribute('length', $s->getLength());
             $enc->setAttribute('type', 'audio/mpeg');
             $item->appendChild($xml->createElement('category', 'Podcasts'));
-            $item->appendChild($xml->createElement('pubDate', $s['pubDate']));
+            $item->appendChild($xml->createElement('pubDate', $s->getPubDate()));
         }
         
         return $xml->saveXML();

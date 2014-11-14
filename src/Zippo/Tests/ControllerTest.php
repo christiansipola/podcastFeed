@@ -4,6 +4,7 @@ namespace Zippo\podcastFeed\Tests;
 
 use Silex\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\HttpKernel;
 
 class ControllerTest extends WebTestCase
@@ -28,16 +29,22 @@ class ControllerTest extends WebTestCase
     public function testInitialPage()
     {
         $client = $this->createClient();
+        $client->followRedirects();
         $crawler = $client->request('GET', '/');
-        $this->assertTrue($client->getResponse()->isOk());
-        $this->assertEquals($crawler->getNode(0)->nodeName, 'rss');
+        $this->assertMusikguiden($client, $crawler);
+        
     }
 
     public function testMusikguiden()
     {
         $client = $this->createClient();
         $crawler = $client->request('GET', '/p3popular');
+        $this->assertMusikguiden($client, $crawler);
+    }
+
+    private function assertMusikguiden(Client $client, Crawler $crawler){
         $this->assertTrue($client->getResponse()->isOk());
+        $this->assertEquals($crawler->getNode(0)->nodeName, 'rss');
         $this->assertXpathExist($crawler, 'rss/channel/description');
         $this->assertXpathHasText($crawler, 'rss/channel/title', 'P3 Populär');
     }

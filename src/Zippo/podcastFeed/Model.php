@@ -15,6 +15,9 @@ class Model
     
     public $latestBuild;
 
+    /**
+     * @var Show[]
+     */
     public $show;
     
     /**
@@ -100,71 +103,77 @@ class Model
     
     /**
      * 
-     * @param \ArrayObject $metadataCollection
+     * @param \ArrayObject|FileMeta[] $metadataCollection
      * @throws \Exception
      */
     public function genShowWithMetaData(\ArrayObject $metadataCollection)
     {
-        $show = array();
-        
-        /* @var $fileMeta FileMeta */
+        $this->show = [];
         foreach ($metadataCollection as $fileMeta) {
-            
-             $year = $fileMeta->year;
-             $month = $fileMeta->month;
-             $day = $fileMeta->day;
-             $part = $fileMeta->part;
-             $size = $fileMeta->size;
-             $file = $fileMeta->file;
-            
-            if ($this->showName == 'p3popular' && ($part == '1' || $part == '2' || $part == 'm' || $part == 's')) {
-                $title = "$year-$month-$day del $part ";
-            } elseif ($this->showName == 'p1sommar' && ($part == 'p')) {
-                // $title = "del 1"; //not many parts anymore
-                $title = "";
-            } elseif ($this->showName == 'p1sommar' && ($part == 'q')) {
-                $title = "del 2";
-            } else {
-                continue;
+            $show = $this->getShowFromFileMeta($fileMeta);
+            if ($show instanceof Show) {
+                $this->show[] = $show;
             }
-            
-            switch ($part) {
-                case 1:
-                    $hour = 10;
-                    $title .= strftime('%A', strtotime("$year-$month-$day"));
-                    break;
-                case 2:
-                    $hour = 11;
-                    $title .= strftime('%A', strtotime("$year-$month-$day"));
-                    break;
-                case 'm':
-                    $hour = 13;
-                    break;
-                case 'p':
-                    $hour = 13;
-                    break;
-                case 's':
-                    $hour = 19;
-                    break;
-                case 'q':
-                    $hour = 14;
-                    break;
-                
-                default:
-                    throw new \Exception('unknown part');
-                    break;
-            }
-            $show[] = array(
-                'title' => $title,
-                'date' => "$year-$month-$day",
-                'url' => "http://{$this->serverName}/" . $this->configuration->urlPath . "files/$file",
-                'length' => $size,
-                'pubDate' => date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
-                        );
         }
-        
-        $this->show = $show;
         return;
+    }
+
+    /**
+     * @param FileMeta $fileMeta
+     * @return Show
+     * @throws \Exception
+     */
+    private function getShowFromFileMeta(FileMeta $fileMeta){
+        
+        $year = $fileMeta->year;
+        $month = $fileMeta->month;
+        $day = $fileMeta->day;
+        $part = $fileMeta->part;
+        $size = $fileMeta->size;
+        $file = $fileMeta->file;
+
+        if ($this->showName == 'p3popular' && ($part == '1' || $part == '2' || $part == 'm' || $part == 's')) {
+            $title = "$year-$month-$day del $part ";
+        } elseif ($this->showName == 'p1sommar' && ($part == 'p')) {
+            // $title = "del 1"; //not many parts anymore
+            $title = "";
+        } elseif ($this->showName == 'p1sommar' && ($part == 'q')) {
+            $title = "del 2";
+        } else {
+            return null;
+        }
+
+        switch ($part) {
+            case 1:
+                $hour = 10;
+                $title .= strftime('%A', strtotime("$year-$month-$day"));
+                break;
+            case 2:
+                $hour = 11;
+                $title .= strftime('%A', strtotime("$year-$month-$day"));
+                break;
+            case 'm':
+                $hour = 13;
+                break;
+            case 'p':
+                $hour = 13;
+                break;
+            case 's':
+                $hour = 19;
+                break;
+            case 'q':
+                $hour = 14;
+                break;
+            default:
+                throw new \Exception('unknown part');
+        }
+        return new Show(
+            $title,
+            "$year-$month-$day",
+            "http://{$this->serverName}/" . $this->configuration->urlPath . "files/$file",
+            $size,
+            date_create("$year-$month-$day $hour:00:00")->format(DATE_RSS)
+        );
     }
 
     /**
@@ -277,8 +286,8 @@ class Model
     {
         $finished = array();
         foreach ($this->show as $s) {
-            if (isset($info[$s['date']])) {
-                $finished[$s['date']] = true;
+            if (isset($info[$s->getDate()])) {
+                $finished[$s->getDate()] = true;
             }
         }
         
