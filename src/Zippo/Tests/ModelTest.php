@@ -44,10 +44,10 @@ class ModelTest extends \PHPUnit_Framework_TestCase
         
         $show = $this->model->getShowList()[0];
         
-        $this->assertEquals('2014-05-28 del 1 Onsdag', $show->getTitle());
+        $this->assertEquals('2014-05-28', $show->getDate());
+        $this->assertEquals('http:///files/podcast-2014-05-28-1.mp3', $show->getUrl());
         $show->getLength();
         $show->getPubDate();
-        $show->getUrl();
-        $show->getDate();
+        $show->getTitle();
     }
 }
