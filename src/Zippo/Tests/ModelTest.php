@@ -4,6 +4,7 @@ namespace Zippo\podcastFeed\Tests;
 
 use Zippo\podcastFeed\Configuration;
 use Zippo\podcastFeed\Model;
+use Zippo\podcastFeed\View;
 
 class ModelTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,8 +47,13 @@ class ModelTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals('2014-05-28', $show->getDate());
         $this->assertEquals('http:///files/podcast-2014-05-28-1.mp3', $show->getUrl());
-        $show->getLength();
-        $show->getPubDate();
-        $show->getTitle();
+        $this->assertNotEmpty($show->getLength());
+        $this->assertNotEmpty($show->getPubDate());
+        $this->assertNotEmpty($show->getTitle());
+        
+        $view = new View();
+        $output = $view->render($this->model);
+        $this->assertTrue(strlen($output) > 0);
+        
     }
 }
