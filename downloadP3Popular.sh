@@ -116,8 +116,8 @@ elif [ $PART = "m" ]; then
 elif [ $PART = "s" ]; then
 	ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
-	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
+	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
+	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
 	STARTLIST="130000"
 elif [ $PART = "q" ]; then
 	echo "nothing to do. exit"
