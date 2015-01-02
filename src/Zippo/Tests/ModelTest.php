@@ -35,6 +35,16 @@ class ModelTest extends \PHPUnit_Framework_TestCase
         $this->model->genShowP1Sommar();
         $string = $this->model->getDownloadCodeSommar($info);
         $this->assertTrue(strlen($string) > 0);
+        
+    }
+
+    public function testSommarView()
+    {
+        $info = $this->model->getInfoP1Sommar();
+        $this->model->genShowP1Sommar();
+        $view = new View();
+        $xmlString = $view->renderP1Sommar($this->model, $info);
+        $this->assertTrue(strlen($xmlString) > 0);
     }
 
     public function testPopular()

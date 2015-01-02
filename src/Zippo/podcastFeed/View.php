@@ -6,7 +6,7 @@ class View
 {
 
     /**
-     * 
+     *
      * @param Model $model
      * @return string
      */
@@ -74,8 +74,8 @@ class View
 
     /**
      *
-     * @param Model $model            
-     * @param array $info            
+     * @param Model $model
+     * @param array $info
      * @return string
      */
     public function renderP1Sommar(Model $model, $info)
@@ -118,23 +118,23 @@ class View
         
         foreach ($show as $s) {
             $item = $channel->appendChild($xml->createElement('item'));
-            if (! isset($info[$s['date']])) {
-                $info[$s['date']] = array(
-                    'title' => $s['date'],
-                    'desc' => $s['date']
+            if (! isset($info[$s->getDate()])) {
+                $info[$s->getDate()] = array(
+                    'title' => $s->getDate(),
+                    'desc' => $s->getDate()
                 );
             }
-            $item->appendChild($xml->createElement('title', $info[$s['date']]['title'] . ' ' . $s['title']));
+            $item->appendChild($xml->createElement('title', $info[$s->getDate()]['title'] . ' ' . $s->getTitle()));
             $item->appendChild($xml->createElement('link', 'http://sverigesradio.se/sida/default.aspx?programid=2071'));
-            $item->appendChild($xml->createElement('guid', $s['url']));
-            $item->appendChild($xml->createElement('description', $info[$s['date']]['desc'] . ' ' . $s['title']));
+            $item->appendChild($xml->createElement('guid', $s->getUrl()));
+            $item->appendChild($xml->createElement('description', $info[$s->getDate()]['desc'] . ' ' . $s->getTitle()));
             $enc = $xml->createElement('enclosure');
             $item->appendChild($enc);
-            $enc->setAttribute('url', $s['url']);
-            $enc->setAttribute('length', $s['length']);
+            $enc->setAttribute('url', $s->getUrl());
+            $enc->setAttribute('length', $s->getLength());
             $enc->setAttribute('type', 'audio/mpeg');
             $item->appendChild($xml->createElement('category', 'Podcasts'));
-            $item->appendChild($xml->createElement('pubDate', $s['pubDate']));
+            $item->appendChild($xml->createElement('pubDate', $s->getPubDate()));
         }
         return $xml->saveXML();
     }
