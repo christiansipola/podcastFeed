@@ -1,7 +1,8 @@
 podcastFeed
 ===========
 
-p3 populär podcast feed
+- needs curl
+- install ffmpeg (not more needed in amazon?)
 
 [![Coverage Status](https://img.shields.io/coveralls/christiansipola/podcastFeed.svg)](https://coveralls.io/r/christiansipola/podcastFeed?branch=master)
 
