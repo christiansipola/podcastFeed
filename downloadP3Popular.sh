@@ -100,52 +100,52 @@ WEEKDAY=`date -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
 BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	STARTLIST="190300 203000" #20:30, 3600 fahl
+    BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+    STARTLIST="190300 203000" #20:30, 3600 fahl
 elif [ $PART == "2" ]; then
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	STARTLIST="173000 183000" ##17:30 summer
-	#BASE_IS_STREAM=1
+    BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+    STARTLIST="173000 183000" ##17:30 summer
+    #BASE_IS_STREAM=1
 elif [ $PART = "m" ]; then
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-	BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
-	BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
-	http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3/2014/08/srp3_2014-08-18_203000_3600_a96.m4a
-	BASE_IS_STREAM=1
-	STARTLIST="193000"
+    BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+    BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
+    BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
+    http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3/2014/08/srp3_2014-08-18_203000_3600_a96.m4a
+    BASE_IS_STREAM=1
+    STARTLIST="193000"
 elif [ $PART = "s" ]; then
-	ARTIST="Luuk & Locko"
+    ARTIST="Luuk & Locko"
 elif [ $PART = "p" ]; then
-	#BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
-	BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
-	STARTLIST="130000"
+    #BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Sommar_i_P1/${YEAR}/${MONTH}/SRP1_"
+    BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P1/Vinter_i_P1/${YEAR}/${MONTH}/SRP1_"
+    STARTLIST="130000"
 elif [ $PART = "q" ]; then
-	echo "nothing to do. exit"
-	exit 1
+    echo "nothing to do. exit"
+    exit 1
 else
-	echo "PART is wrong!"
-	exit 1
+    echo "PART is wrong!"
+    exit 1
 fi
 
 if [ -a "$FILE.$SUFFIX" ] ; then
-	if [ "$FORCE" == "true" ] ; then
-		echo "file $FILE.$SUFFIX already exist but it wil be overwritten!"
-	else	
-		echo "file $FILE.$SUFFIX already exist. Use -f to force overwrite."
-		exit 1
-	fi
+    if [ "$FORCE" == "true" ] ; then
+        echo "file $FILE.$SUFFIX already exist but it wil be overwritten!"
+    else	
+        echo "file $FILE.$SUFFIX already exist. Use -f to force overwrite."
+        exit 1
+    fi
 fi
 
 PIPE="pipe_$TITLE"
 if [ -p $PIPE ]; then
-	echo "using existing named pipe"
+    echo "using existing named pipe"
 elif [ -e $PIPE ]; then
-	echo "file pipe exist and is not a named pipe!"
-	#exit 1;
+    echo "file pipe exist and is not a named pipe!"
+    #exit 1;
 else
-	#echo "creating named pipe"
-	#mkfifo $PIPE #does not work with curl
-	touch $PIPE
+    #echo "creating named pipe"
+    #mkfifo $PIPE #does not work with curl
+    touch $PIPE
 fi
 
 ## download ##
