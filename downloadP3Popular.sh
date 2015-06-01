@@ -101,7 +101,7 @@ BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
     BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-    STARTLIST="190300 203000" #20:30, 3600 fahl
+    STARTLIST="190300 203000 120300 130300" #20:30, 3600 fahl, 12:03, 13:03 Musikguiden i P3: Musiken i P3
 elif [ $PART == "2" ]; then
     BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
     STARTLIST="173000 183000" ##17:30 summer
