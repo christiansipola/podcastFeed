@@ -198,7 +198,10 @@ fi
 
 ## convert ##
 
-nice -n19 ffmpeg -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
+## ffmpeg not in ubuntu, and avconv gets killed if convert
+# nice -n19 avconv -v 5 -y -i $PIPE -ac 2 -ab 192k "$FILE.mp3"
+## try to copy instead
+cp $PIPE "$FILE.m4a"
 
 date
 
