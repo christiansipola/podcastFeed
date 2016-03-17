@@ -184,7 +184,7 @@ do
         fi
         nice -n19 curl -f -v $STREAM -o $PIPE
         if [ $? != "22" ]; then
-            break
+            break 2
         else
             echo "$LENGTH failed."
         fi
