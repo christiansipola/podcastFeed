@@ -187,6 +187,8 @@ do
             break 2
         else
             echo "$LENGTH failed."
+	    #sleep random 1-10 sec
+ 	    sleep $[ ( $RANDOM % 4 )  + 1 ]s
         fi
     done
 done

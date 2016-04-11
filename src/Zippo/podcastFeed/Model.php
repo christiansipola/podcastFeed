@@ -2,6 +2,8 @@
 
 namespace Zippo\podcastFeed;
 
+use SimpleXMLElement;
+
 class Model
 {
 
@@ -155,12 +157,38 @@ class Model
     }
 
     /**
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     private static function getXmlForSommar()
     {
+        /*
+         * old url (redirect to below?)
+        // http://api.sr.se/api/rssfeed/rssfeed.aspx?lyssnaigenfeed=2071
+        // broadcast. original byut short desc
+        // http://sverigesradio.se/api/rss/broadcast/2071
+         */
         // pod sommar more desc
         $url = 'http://api.sr.se/api/rss/pod/4023';
+        return self::getXmlForUrl($url);
+    }
+
+    /**
+     * @param string $url
+     * @return SimpleXMLElement
+     */
+    public static function getXmlForUrl($url)
+    {
+        $str = self::getStringForUrl($url);
+        $xml = new SimpleXMLElement($str);
+        return $xml;
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public static function getStringForUrl($url)
+    {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -168,9 +196,9 @@ class Model
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         $str = curl_exec($curl);
         curl_close($curl);
-        $xml = new \SimpleXMLElement($str);
-        return $xml;
+        return $str;
     }
+    
     
     public static function getInfoP1Sommar()
     {
