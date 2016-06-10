@@ -100,17 +100,15 @@ WEEKDAY=`date -v${YEAR}y -v${MONTH}m -v${DAY}d +%u`
 BASE_IS_STREAM=0
 
 if [ $PART == "1" ]; then
-    BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
+    BASE="http://lyssna.sr.se/ljudit/p3/musikguiden_i_p3/2016/06/musikguiden_i_p3_${YEAR}${MONTH}${DAY}_"
     STARTLIST="190300 203000 120300 130300" #20:30, 3600 fahl, 12:03, 13:03 Musikguiden i P3: Musiken i P3
 elif [ $PART == "2" ]; then
-    BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
-    STARTLIST="173000 183000" ##17:30 summer
-    #BASE_IS_STREAM=1
+    BASE="http://lyssna.sr.se/ljudit/p3/musikguiden_i_p3/2016/06/musikguiden_i_p3_${YEAR}${MONTH}${DAY}_"
+    STARTLIST="1730 1830" ##17:30 summer
 elif [ $PART = "m" ]; then
     BASE="http://lyssnaigen.sr.se/Autorec/ET2W/P3/Musikguiden_i_P3/${YEAR}/${MONTH}/SRP3_"
     BASE="http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3_hitfabriken/${YEAR}/${MONTH}/srp3_"
     BASE="http://lyssnaigen.sr.se/isidor/ereg/p3_stockholm/2014/02/7_sr_p3_2014-02-11_1930_48a31e7_a192.m4a"
-    http://lyssnaigen.sr.se/autorec/et2w/p3/musikguiden_i_p3/2014/08/srp3_2014-08-18_203000_3600_a96.m4a
     BASE_IS_STREAM=1
     STARTLIST="193000"
 elif [ $PART = "s" ]; then
@@ -152,43 +150,19 @@ fi
 echo "starting to download and convert..."
 date
 
-## 1740 = (30 - 1) * 60
-LIST00="5400 7200 9000 10800 12600 3600 1800 1740"
-LIST0030="5220"
-LIST03="3420 5220 7020 8820 1620"
-LIST06="1440 3240"
-LIST="5520"
-
 for START in ${STARTLIST}
 do
-    STARTMINUTE=${START:2:4}
-    if [ $STARTMINUTE == "0000" ]; then
-        LIST=$LIST00
-    elif [ $STARTMINUTE == "0030" ]; then
-        LIST=$LIST0030
-    elif [ $STARTMINUTE == "0300" ]; then
-        LIST=$LIST03
-    elif [ $STARTMINUTE == "0600" ]; then
-      LIST=$LIST06
-    elif [ $STARTMINUTE == "3000" ]; then
-      LIST=$LIST00
+    echo "trying start ${START}"
+    STREAM="${BASE}${START}_192.m4a"
+    if [ ${BASE_IS_STREAM} == 1 ]; then
+      STREAM=${BASE}
     fi
-
-
-    for LENGTH in ${LIST}
-    do
-        echo "trying length ${LENGTH}"
-        STREAM="${BASE}${DATE}_${START}_${LENGTH}_a192.m4a"
-        if [ $BASE_IS_STREAM == 1 ]; then
-          STREAM=$BASE
-        fi
-        nice -n19 curl -f -v $STREAM -o $PIPE
-        if [ $? != "22" ]; then
-            break 2
-        else
-            echo "$LENGTH failed."
-        fi
-    done
+    nice -n19 curl -f -v ${STREAM} -o ${PIPE}
+    if [ $? != "22" ]; then
+        break 2
+    else
+        echo "${LENGTH} failed."
+    fi
 done
 
 if [ $? == "22" ]; then
